@@ -32,7 +32,7 @@ public class EmployeeController {
     private JwtProperties jwtProperties;
 
     /**
-     * 登录
+     * 管理端登录
      *
      * @param employeeLoginDTO
      * @return
