@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,5 +94,17 @@ public class EmployeeController {
         log.info("分页查询员工参数{}",employeePageQueryDTO);
         PageResult pageResult=employeeService.pageViewEmp(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 设置员工状态
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public Result setEmpStatus(@PathVariable Integer status ,Long id){
+        employeeService.setEmpStatus(status,id);
+        return Result.success();
     }
 }

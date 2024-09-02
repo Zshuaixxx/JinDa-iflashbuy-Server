@@ -7,6 +7,7 @@ import com.sky.result.PageResult;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface EmployeeMapper {
@@ -34,4 +35,10 @@ public interface EmployeeMapper {
      * @return
      */
     Page<Employee> pageViewEmp(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * 更新员工信息
+     * @param employee
+     */
+    void updataEmp(Employee employee);
 }
