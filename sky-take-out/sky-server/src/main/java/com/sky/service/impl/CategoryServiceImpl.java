@@ -54,4 +54,15 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.addCategory(category);
     }
+
+    @Override
+    public void setCateStatus(String status, Long id) {
+        Category category = Category.builder()
+                .status(Integer.valueOf(status))
+                .id(id)
+                .updateUser(BaseContext.getCurrentId())
+                .updateTime(LocalDateTime.now())
+                .build();
+        categoryMapper.updateCate(category);
+    }
 }

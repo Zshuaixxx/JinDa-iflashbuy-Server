@@ -7,10 +7,7 @@ import com.sky.result.Result;
 import com.sky.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author 帅的被人砍
@@ -49,5 +46,18 @@ public class CategoryController {
         log.info("新增分类信息{}",categoryDTO);
         categoryService.addCategory(categoryDTO);
         return  Result.success();
+    }
+
+    /**
+     * 设置分类状态
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/admin/category/status/{status}")
+    public Result setCateStatus(@PathVariable String status,Long id){
+        log.info("设置分类状态{}，{}",status,id);
+        categoryService.setCateStatus(status,id);
+        return Result.success();
     }
 }

@@ -13,4 +13,35 @@
             </if>
         </where>
     </select>
+
+    <update id="updateCate" >
+        update category
+        <set>
+            <if test="type != null">
+                type=#{type},
+            </if>
+            <if test="name != null and name != ''">
+                name=#{name},
+            </if>
+            <if test="sort != null">
+                sort=#{sort},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+            <if test="createUser != null">
+                create_user=#{createUser}
+            </if>
+            <if test="updateUser != null">
+                update_user=#{updateUser}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

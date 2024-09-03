@@ -22,4 +22,11 @@ public interface CategoryService {
      * @param categoryDTO
      */
     void addCategory(CategoryDTO categoryDTO);
+
+    /**
+     * 设置分类状态
+     * @param status
+     * @param id
+     */
+    void setCateStatus(String status, Long id);
 }
