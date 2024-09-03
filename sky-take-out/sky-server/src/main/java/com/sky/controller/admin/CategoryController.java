@@ -71,4 +71,17 @@ public class CategoryController {
         categoryService.updateCate(categoryDTO);
         return Result.success();
     }
+
+    /**
+     * 根据id删除分类
+     * @param id
+     * @return
+     */
+//    当前数据库对应一个菜品只能有一个分类  删除分类时注意处理菜品
+    @DeleteMapping("/admin/category")
+    public Result deleteCate(Long id){
+        log.info("删除分类{}",id);
+        categoryService.deleteCate(id);
+        return Result.success("该分类下菜品已清除分类");
+    }
 }

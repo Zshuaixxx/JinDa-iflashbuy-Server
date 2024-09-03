@@ -7,6 +7,7 @@ import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.mapper.CategoryMapper;
+import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.CategoryService;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private DishMapper dishMapper;
     /**
      * 分页查询分类信息
      * @param categoryPageQueryDTO
@@ -82,5 +85,15 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdateUser(BaseContext.getCurrentId());
         category.setUpdateTime(LocalDateTime.now());
         categoryMapper.updateCate(category);
+    }
+
+    /**
+     * 根据id删除分类
+     * @param id
+     */
+    @Override
+    public void deleteCate(Long id) {
+        dishMapper.deleteCate(id);
+        categoryMapper.deleteCate(id);
     }
 }
