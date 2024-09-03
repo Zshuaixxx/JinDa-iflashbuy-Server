@@ -60,4 +60,15 @@ public class CategoryController {
         categoryService.setCateStatus(status,id);
         return Result.success();
     }
+
+    /**
+     * 修改分类信息
+     * @param categoryDTO
+     */
+    @PutMapping("/admin/category")
+    public Result updateCate(@RequestBody CategoryDTO categoryDTO){
+        log.info("修改分类信息{}",categoryDTO);
+        categoryService.updateCate(categoryDTO);
+        return Result.success();
+    }
 }

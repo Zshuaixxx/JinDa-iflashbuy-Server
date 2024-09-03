@@ -55,6 +55,11 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.addCategory(category);
     }
 
+    /**
+     * 设置分类状态
+     * @param status
+     * @param id
+     */
     @Override
     public void setCateStatus(String status, Long id) {
         Category category = Category.builder()
@@ -63,6 +68,19 @@ public class CategoryServiceImpl implements CategoryService {
                 .updateUser(BaseContext.getCurrentId())
                 .updateTime(LocalDateTime.now())
                 .build();
+        categoryMapper.updateCate(category);
+    }
+
+    /**
+     * 修改分类信息
+     * @param categoryDTO
+     */
+    @Override
+    public void updateCate(CategoryDTO categoryDTO) {
+        Category category=new Category();
+        BeanUtils.copyProperties(categoryDTO,category);
+        category.setUpdateUser(BaseContext.getCurrentId());
+        category.setUpdateTime(LocalDateTime.now());
         categoryMapper.updateCate(category);
     }
 }
