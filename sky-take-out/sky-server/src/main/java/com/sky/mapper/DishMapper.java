@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.sky.annotation.AutoFill;
+import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
@@ -19,4 +20,11 @@ public interface DishMapper {
     @AutoFill(OperationType.UPDATE)
     @Update("update dish set category_id=1 where category_id=#{id}")
     void deleteCate(Long id);
+
+    /**
+     * 添加菜品
+     * @param dish
+     */
+    @AutoFill(OperationType.INSERT)
+    void addDish(Dish dish);
 }
