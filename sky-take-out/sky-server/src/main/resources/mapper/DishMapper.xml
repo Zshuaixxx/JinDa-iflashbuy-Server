@@ -7,4 +7,19 @@
         VALUES
         (#{name},#{categoryId},#{price},#{image},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
+    
+    <select id="pageViewDish" resultType="com.sky.vo.DishVO">
+        select dish.*,category.name as categoryName from dish LEFT OUTER JOIN category on dish.category_id = category.id
+        <where>
+            <if test="name != null and name!= ''">
+                name like contat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null and categoryId!= '' ">
+                and category_id=#{categoryId}
+            </if>
+            <if test="status != null and status != '' ">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -1,8 +1,10 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
@@ -27,4 +29,15 @@ public interface DishMapper {
      */
     @AutoFill(OperationType.INSERT)
     void addDish(Dish dish);
+
+    /**
+     * 分页查询菜品（支持三种条件）
+     * @param page
+     * @param pageSize
+     * @param categoryId
+     * @param name
+     * @param status
+     * @return
+     */
+    Page<DishVO> pageViewDish(String page, String pageSize, String categoryId, String name, String status);
 }

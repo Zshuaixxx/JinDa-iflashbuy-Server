@@ -1,11 +1,15 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,5 +49,23 @@ public class DishServiceImpl implements DishService {
             });
             dishFlavorMapper.addDishFlavor(flavors);
         }
+    }
+
+    /**
+     * 分页查询菜品（支持三种条件）
+     * @param page
+     * @param pageSize
+     * @param categoryId
+     * @param name
+     * @param status
+     * @return
+     */
+    @Override
+    public PageResult pageViewDish(String page, String pageSize, String categoryId, String name, String status) {
+        PageHelper.startPage(Integer.parseInt(page),Integer.parseInt(pageSize));
+        Page<DishVO> pageResult=dishMapper.pageViewDish(page,pageSize,categoryId,name,status);
+        long total=pageResult.getTotal();
+        List<DishVO> records=pageResult.getResult();
+        return new PageResult(total,records);
     }
 }

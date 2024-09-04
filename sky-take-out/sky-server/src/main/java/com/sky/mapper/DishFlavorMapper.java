@@ -1,6 +1,8 @@
 package com.sky.mapper;
 
 
+import com.github.pagehelper.Page;
+import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,4 +20,5 @@ public interface DishFlavorMapper {
      * @param flavors
      */
     void addDishFlavor(List<DishFlavor> flavors);
+
 }
