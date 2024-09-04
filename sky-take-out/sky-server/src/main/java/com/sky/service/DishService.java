@@ -2,6 +2,9 @@ package com.sky.service;
 
 import com.sky.dto.DishDTO;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
+
+import java.util.List;
 
 /**
  * @author 帅的被人砍
@@ -25,4 +28,10 @@ public interface DishService {
      * @return
      */
     PageResult pageViewDish(String page, String pageSize, String categoryId, String name, String status);
+
+    /**
+     * 批量删除菜品
+     * @param ids
+     */
+    Result<String> deleteDishs(List<Long> ids);
 }

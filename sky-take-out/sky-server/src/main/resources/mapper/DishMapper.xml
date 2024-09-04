@@ -22,4 +22,19 @@
             </if>
         </where>
     </select>
+
+    <select id="getDishByIds" resultType="com.sky.entity.Dish">
+        select * from dish
+        where id in
+        <foreach collection="ids" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteDishs">
+        delete from dish where id in
+        <foreach collection="ids" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
 </mapper>

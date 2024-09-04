@@ -2,13 +2,18 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.SetmealDish;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.service.SetmealDishService;
 import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ public class DishServiceImpl implements DishService {
     private DishMapper dishMapper;
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
 
     /**
      * 添加菜品
@@ -67,5 +74,30 @@ public class DishServiceImpl implements DishService {
         long total=pageResult.getTotal();
         List<DishVO> records=pageResult.getResult();
         return new PageResult(total,records);
+    }
+
+    /**
+     * 批量删除菜品
+     * @param ids
+     */
+    @Transactional
+    @Override
+    public Result<String> deleteDishs(List<Long> ids) {
+        //判断是否有起售中的菜品
+        Dish[] dishs=dishMapper.getDishByIds(ids);
+        for (int i = 0; i < dishs.length; i++) {
+            if(dishs[i].getStatus() == StatusConstant.ENABLE){
+                return Result.error(dishs[i].getName() + "启售中 无法删除");
+            }
+        }
+        //判断是否有菜品关联套餐
+        List<SetmealDish> setmealDishes = setmealDishMapper.getSetmealDishByDishids(ids);
+        if(setmealDishes != null && setmealDishes.size()>0){
+            return Result.error(setmealDishes.get(0).getName()+"关联套餐 无法删除");
+        }
+        //删除菜品和关联的口味
+        dishMapper.deleteDishs(ids);
+        dishFlavorMapper.deleteDishFlavor(ids);
+        return Result.success("删除成功");
     }
 }

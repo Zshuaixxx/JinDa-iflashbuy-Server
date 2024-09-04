@@ -8,6 +8,8 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 /**
  * @author 帅的被人砍
  * @create 2024-09-03 18:13
@@ -40,4 +42,17 @@ public interface DishMapper {
      * @return
      */
     Page<DishVO> pageViewDish(String page, String pageSize, String categoryId, String name, String status);
+
+    /**
+     * 根据ids查询菜品
+     * @param ids
+     * @return
+     */
+    Dish[] getDishByIds(List<Long> ids);
+
+    /**
+     * 批量删除菜品
+     * @param ids
+     */
+    void deleteDishs(List<Long> ids);
 }

@@ -5,11 +5,11 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author 帅的被人砍
@@ -48,5 +48,16 @@ public class DishController {
         log.info("分页查询菜品：{},{},{},{},{}",page,pageSize,categoryId,name,status);
         PageResult pageResult=dishService.pageViewDish(page,pageSize,categoryId,name,status);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 批量删除菜品
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/admin/dish")
+    public Result<String> deleteDishs(@RequestParam List<Long> ids){
+        log.info("批量删除菜品{}",ids);
+        return dishService.deleteDishs(ids);
     }
 }
