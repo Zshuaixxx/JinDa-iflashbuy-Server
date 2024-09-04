@@ -96,4 +96,14 @@ public class CategoryServiceImpl implements CategoryService {
         dishMapper.deleteCate(id);
         categoryMapper.deleteCate(id);
     }
+
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
+    @Override
+    public Category[] getCateListByType(Integer type) {
+        return categoryMapper.getCateListByType(type);
+    }
 }

@@ -9,6 +9,7 @@ import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @author 帅的被人砍
@@ -46,4 +47,12 @@ public interface CategoryMapper {
      */
     @Delete("delete from category where id=#{id}")
     void deleteCate(Long id);
+
+    /**
+     *根据类型查询分类
+     * @param type
+     * @return
+     */
+    @Select("select * from category where type=#{type}")
+    Category[] getCateListByType(Integer type);
 }

@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
+import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
@@ -83,5 +84,17 @@ public class CategoryController {
         log.info("删除分类{}",id);
         categoryService.deleteCate(id);
         return Result.success("该分类下菜品已清除分类");
+    }
+
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
+    @GetMapping("/admin/category/list")
+    public Result<Category[]> getCateListByType(Integer type){
+        log.info("根据类型查询分类{}",type);
+        Category[] categories=categoryService.getCateListByType(type);
+        return Result.success(categories);
     }
 }
