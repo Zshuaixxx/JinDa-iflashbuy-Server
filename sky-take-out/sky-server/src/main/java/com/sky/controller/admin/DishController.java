@@ -4,11 +4,12 @@ import com.sky.dto.DishDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 /**
@@ -59,5 +60,28 @@ public class DishController {
     public Result<String> deleteDishs(@RequestParam List<Long> ids){
         log.info("批量删除菜品{}",ids);
         return dishService.deleteDishs(ids);
+    }
+
+    /**
+     * 根据id查询菜品 包括菜品关联的口味
+     * @return
+     */
+    @GetMapping("/admin/dish/{id}")
+    public Result<DishVO> getDishAndFlavorById(@PathVariable Long id){
+        log.info("根据id查询菜品：{}",id);
+        DishVO dishVO=dishService.getDishAndFlavorById(id);
+        return Result.success(dishVO);
+    }
+
+    /**
+     * 更新菜品及其口味信息
+     * @param dishDTO
+     * @return
+     */
+    @PutMapping("/admin/dish")
+    public Result updateDishAndFlavorById(@RequestBody DishDTO dishDTO){
+        log.info("更新菜品信息{}",dishDTO);
+        dishService.updateDishAndFlavorById(dishDTO);
+        return Result.success();
     }
 }

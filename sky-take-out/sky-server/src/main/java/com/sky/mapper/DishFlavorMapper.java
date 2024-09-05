@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -26,4 +27,12 @@ public interface DishFlavorMapper {
      * @param ids
      */
     void deleteDishFlavor(List<Long> ids);
+
+    /**
+     * 根据菜品id查询对应口味
+     * @param dishid
+     * @return
+     */
+    @Select("select * from dish_flavor where dish_id=#{dishid}")
+    List<DishFlavor> getFloverByDishId(Long dishid);
 }
