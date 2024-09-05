@@ -16,6 +16,10 @@ import java.util.List;
  * @author 帅的被人砍
  * @create 2024-09-04 17:34
  */
+
+/**
+ * 菜品管理
+ */
 @Slf4j
 @RestController
 public class DishController {
@@ -82,6 +86,19 @@ public class DishController {
     public Result updateDishAndFlavorById(@RequestBody DishDTO dishDTO){
         log.info("更新菜品信息{}",dishDTO);
         dishService.updateDishAndFlavorById(dishDTO);
+        return Result.success();
+    }
+
+    /**
+     * 菜品启停售
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/admin/dish/status/{status}")
+    public Result updateDishStatusById(@PathVariable Integer status,Long id){
+        log.info("菜品启停售{}{}",status,id);
+        dishService.updateDishStatusById(status,id);
         return Result.success();
     }
 }
