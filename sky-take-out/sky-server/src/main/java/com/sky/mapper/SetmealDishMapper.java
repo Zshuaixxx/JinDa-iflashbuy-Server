@@ -17,4 +17,10 @@ public interface SetmealDishMapper {
      * @return
      */
     List<SetmealDish> getSetmealDishByDishids(List<Long> ids);
+
+    /**
+     * 插入套餐对应的菜品列表
+     * @param setmealDishes
+     */
+    void addSetmealDish(List<SetmealDish> setmealDishes);
 }
