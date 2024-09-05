@@ -1,5 +1,6 @@
 package com.sky.dto;
 
+import com.sky.entity.Setmeal;
 import lombok.Data;
 
 import java.io.Serializable;
