@@ -27,6 +27,7 @@
         where setmeal.id=#{id}
     </select>
 
+
     <update id="updateSetmeal" >
         update setmeal
         <set>
@@ -57,4 +58,9 @@
         </set>
         where id=#{id}
     </update>
+
+    <select id="getDishBySetmealId" resultType="com.sky.entity.Dish">
+        select dish.* from dish left outer join setmeal_dish on setmeal_dish.dish_id=dish.id
+        where setmeal_dish.setmeal_id=#{id}
+    </select>
 </mapper>

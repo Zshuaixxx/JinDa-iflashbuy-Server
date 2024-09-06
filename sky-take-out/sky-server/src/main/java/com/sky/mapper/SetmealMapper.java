@@ -3,10 +3,14 @@ package com.sky.mapper;
 import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @author 帅的被人砍
@@ -41,4 +45,18 @@ public interface SetmealMapper {
      */
     @AutoFill(OperationType.UPDATE)
     void updateSetmeal(Setmeal setmeal);
+
+    /**
+     * 根据套餐id查询对应菜品
+     * @param id
+     * @return
+     */
+    List<Dish> getDishBySetmealId(Integer id);
+
+    /**
+     * 根据id删除套餐
+     * @param setmealId
+     */
+    @Delete("delete from setmeal where id=#{setmealId}")
+    void deleteById(Integer setmealId);
 }

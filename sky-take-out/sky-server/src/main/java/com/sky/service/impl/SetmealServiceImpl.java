@@ -3,14 +3,20 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.annotation.AutoFill;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.enumeration.OperationType;
+import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.SetmealEnableFailedException;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
@@ -112,10 +118,44 @@ public class SetmealServiceImpl implements SetmealService {
     @AutoFill(OperationType.UPDATE)
     @Override
     public void updateSetmealStatus(Integer status, Integer id) {
+        //起售前判断套餐内有无停售菜品
+        if(status == StatusConstant.ENABLE){
+            List<Dish> dishList=setmealMapper.getDishBySetmealId(id);
+            if(dishList != null && dishList.size() > 0){
+                dishList.forEach(dish -> {
+                    if(StatusConstant.DISABLE == dish.getStatus()){
+                        throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                    }
+                });
+            }
+        }
         Setmeal setmeal = Setmeal.builder()
                 .id(Long.valueOf(id))
                 .status(status)
                 .build();
         setmealMapper.updateSetmeal(setmeal);
+    }
+
+    /**
+     * 批量删除套餐
+     * @param ids
+     */
+    @Override
+    public Result deleteSetmealsByIds(List<Integer> ids) {
+        ids.forEach(id->{
+            SetmealVO setmealVO=setmealMapper.getSetmealById(id);
+            if(setmealVO.getStatus() == StatusConstant.ENABLE){
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+            }
+        });
+        // TODO 优化为删除ids 一次sql语句执行完成
+        ids.forEach(setmealId -> {
+            //删除套餐表中的数据
+            setmealMapper.deleteById(setmealId);
+            //删除套餐菜品关系表中的数据
+            setmealDishMapper.deleteBySetmaelId(Long.valueOf(setmealId));
+        });
+
+        return Result.success();
     }
 }
