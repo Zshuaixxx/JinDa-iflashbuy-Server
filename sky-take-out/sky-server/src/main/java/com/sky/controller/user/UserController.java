@@ -15,17 +15,16 @@ import com.sky.mapper.DishMapper;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
+import com.sky.service.SetmealDishService;
 import com.sky.service.SetmealService;
 import com.sky.service.UserService;
 import com.sky.utils.JwtUtil;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import com.sky.vo.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +45,8 @@ public class UserController {
     private JwtProperties jwtProperties;
     @Autowired
     private SetmealService setmealService;
+    @Autowired
+    private SetmealDishService setmealDishService;
 
     /**
      * 用户端登录
@@ -105,5 +106,16 @@ public class UserController {
         log.info("用户根据分类id查询套餐信息{}",categoryId);
         Setmeal[] setmeals=setmealService.getSetmealByCategoryId(categoryId);
         return Result.success(setmeals);
+    }
+
+    /**
+     * 根据套餐id查询对应的菜品信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/user/setmeal/dish/{id}")
+    public Result<DishItemVO[]> getDishBySetmealId(@PathVariable Long id){
+        log.info("根据套餐id查询对应的菜品信息{}",id);
+        return Result.success(setmealDishService.getDishBySetmealId(id));
     }
 }

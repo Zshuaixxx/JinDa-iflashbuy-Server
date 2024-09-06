@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.vo.DishItemVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -49,4 +50,11 @@ public interface SetmealDishMapper {
      */
     @Select("select * from setmeal where category_id=#{categoryId}")
     Setmeal[] getSetmealByCategoryId(Long categoryId);
+
+    /**
+     * 根据套餐id查询对应的菜品信息
+     * @param id
+     * @return
+     */
+    DishItemVO[] getDishItemBySetmealId(Long id);
 }

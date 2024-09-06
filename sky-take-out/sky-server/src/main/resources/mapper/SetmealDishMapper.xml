@@ -22,4 +22,9 @@
         select * from setmeal_dish
         where setmeal_id=#{id}
     </select>
+
+    <select id="getDishItemBySetmealId" resultType="com.sky.vo.DishItemVO">
+        select setmeal_dish.copies,dish.description,dish.image,dish.name from setmeal_dish left outer join dish on setmeal_dish.dish_id = dish.id
+        where setmeal_dish.setmeal_id=#{id}
+    </select>
 </mapper>
