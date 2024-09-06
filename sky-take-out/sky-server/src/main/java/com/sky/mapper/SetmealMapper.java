@@ -27,4 +27,11 @@ public interface SetmealMapper {
      * @return
      */
     Page<SetmealVO> pageViewSetmeal(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * 根据套餐id查询套餐和对应的分类名称
+     * @param id
+     * @return
+     */
+    SetmealVO getSetmealById(Integer id);
 }

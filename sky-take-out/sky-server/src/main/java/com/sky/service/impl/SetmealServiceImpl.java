@@ -67,4 +67,17 @@ public class SetmealServiceImpl implements SetmealService {
         List<SetmealVO> records=page.getResult();
         return new PageResult(total,records);
     }
+
+    /**
+     * 根据id查询套餐 包括套餐对应的菜品信息
+     * @param id
+     * @return
+     */
+    @Override
+    public SetmealVO getSetmealById(Integer id) {
+        //现查套餐 再查菜品
+        SetmealVO setmealVO=setmealMapper.getSetmealById(id);
+        setmealVO.setSetmealDishes(setmealDishMapper.getSetmealDishBySetmealId(id));
+        return setmealVO;
+    }
 }

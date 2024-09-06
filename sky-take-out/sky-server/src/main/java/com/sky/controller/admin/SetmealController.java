@@ -10,12 +10,10 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetmealService;
+import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 套餐管理
@@ -46,6 +44,19 @@ public class SetmealController {
      */
     @GetMapping("/admin/setmeal/page")
     public Result<PageResult> pageViewSetmeal(SetmealPageQueryDTO setmealPageQueryDTO){
+        log.info("分页查询套餐{}",setmealPageQueryDTO);
         return Result.success(setmealService.pageViewSetmeal(setmealPageQueryDTO));
     }
+
+    /**
+     * 根据id查询套餐 包括套餐对应的菜品信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/admin/setmeal/{id}")
+    public Result<SetmealVO> getSetmealById(@PathVariable Integer id){
+        log.info("根据id查询套餐",id);
+        return Result.success(setmealService.getSetmealById(id));
+    }
+
 }
