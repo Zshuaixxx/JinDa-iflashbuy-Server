@@ -9,11 +9,13 @@ import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.Category;
 import com.sky.entity.Dish;
+import com.sky.entity.Setmeal;
 import com.sky.entity.User;
 import com.sky.mapper.DishMapper;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
+import com.sky.service.SetmealService;
 import com.sky.service.UserService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.DishVO;
@@ -43,7 +45,7 @@ public class UserController {
     @Autowired
     private JwtProperties jwtProperties;
     @Autowired
-    private DishMapper dishMapper;
+    private SetmealService setmealService;
 
     /**
      * 用户端登录
@@ -82,13 +84,26 @@ public class UserController {
     }
 
     /**
-     * 查询分类id下的所有菜品和对应的口味
+     * 查询菜品分类id下的所有菜品和对应的口味
      * @param categoryId
      * @return
      */
     @GetMapping("/user/dish/list")
     public Result<DishVO[]> getDishAndFlavorsByCategoryId(Long categoryId){
+        log.info("用户查询菜品分类id下的所有菜品和对应的口味{}",categoryId);
         DishVO[] dishVOS=userService.getDishAndFlavorsByCategoryId(categoryId);
         return Result.success(dishVOS);
+    }
+
+    /**
+     * 根据分类id查询套餐信息
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/user/setmeal/list")
+    public Result<Setmeal[]> getSetmealByCategoryId(Long categoryId){
+        log.info("用户根据分类id查询套餐信息{}",categoryId);
+        Setmeal[] setmeals=setmealService.getSetmealByCategoryId(categoryId);
+        return Result.success(setmeals);
     }
 }
