@@ -40,7 +40,7 @@ public class SetmealServiceImpl implements SetmealService {
     @Transactional
     @Override
     public void addSetmeal(SetmealDTO setmealDTO) {
-        // 插入套餐表   TODO 需要返回id
+        // 插入套餐表   TO DO 需要返回id
         Setmeal setmeal=new Setmeal();
         BeanUtils.copyProperties(setmealDTO,setmeal);
         setmealMapper.addSetmeal(setmeal);
@@ -79,5 +79,28 @@ public class SetmealServiceImpl implements SetmealService {
         SetmealVO setmealVO=setmealMapper.getSetmealById(id);
         setmealVO.setSetmealDishes(setmealDishMapper.getSetmealDishBySetmealId(id));
         return setmealVO;
+    }
+
+    /**
+     * 修改更新套餐信息
+     * @param setmealDTO
+     */
+    @Override
+    @Transactional
+    public void updateSetmeal(SetmealDTO setmealDTO) {
+        //套餐表
+        Setmeal setmeal=new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+        setmealMapper.updateSetmeal(setmeal);
+
+        //套餐菜品关系表 先删 后增
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if(setmealDishes != null  && setmealDishes.size()>0){
+            setmealDishes.forEach(item ->{
+                item.setSetmealId(setmeal.getId());
+            });
+            setmealDishMapper.deleteBySetmaelId(setmeal.getId());
+            setmealDishMapper.addSetmealDish(setmealDishes);
+        }
     }
 }

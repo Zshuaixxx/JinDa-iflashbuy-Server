@@ -34,4 +34,11 @@ public interface SetmealMapper {
      * @return
      */
     SetmealVO getSetmealById(Integer id);
+
+    /**
+     * 更新套餐表信息
+     * @param setmeal
+     */
+    @AutoFill(OperationType.UPDATE)
+    void updateSetmeal(Setmeal setmeal);
 }

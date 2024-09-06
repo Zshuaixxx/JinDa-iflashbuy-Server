@@ -30,4 +30,10 @@ public interface SetmealService {
      * @return
      */
     SetmealVO getSetmealById(Integer id);
+
+    /**
+     * 修改更新套餐信息
+     * @param setmealDTO
+     */
+    void updateSetmeal(SetmealDTO setmealDTO);
 }

@@ -59,4 +59,15 @@ public class SetmealController {
         return Result.success(setmealService.getSetmealById(id));
     }
 
+    /**
+     * 修改更新套餐信息
+     * @param setmealDTO
+     * @return
+     */
+    @PutMapping("/admin/setmeal")
+    public Result updateSetmeal(@RequestBody SetmealDTO setmealDTO){
+        log.info("修改套餐{}",setmealDTO);
+        setmealService.updateSetmeal(setmealDTO);
+        return Result.success();
+    }
 }

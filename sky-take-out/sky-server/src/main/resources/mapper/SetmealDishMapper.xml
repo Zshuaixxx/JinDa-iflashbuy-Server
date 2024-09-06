@@ -12,7 +12,7 @@
 
     <insert id="addSetmealDish">
         insert into setmeal_dish(setmeal_id, dish_id, name, price, copies) 
-        value
+        values
         <foreach collection="setmealDishes"  item="item" separator="," >
             (#{item.setmealId},#{item.dishId},#{item.name},#{item.price},#{item.copies})
         </foreach>
