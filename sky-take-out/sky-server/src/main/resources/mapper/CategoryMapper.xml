@@ -44,4 +44,12 @@
         </set>
         where id=#{id}
     </update>
+    <select id="getCateListByType" resultType="com.sky.entity.Category">
+        select * from category
+        <where>
+            <if test="type != null">
+                type=#{type}
+            </if>
+        </where>
+    </select>
 </mapper>

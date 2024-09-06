@@ -7,19 +7,23 @@ package com.sky.controller.user;
 
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.UserLoginDTO;
+import com.sky.entity.Category;
 import com.sky.entity.User;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
+import com.sky.service.CategoryService;
 import com.sky.service.UserService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +35,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CategoryService categoryService;
     @Autowired
     private JwtProperties jwtProperties;
 
@@ -56,5 +62,17 @@ public class UserController {
                 .token(token)
                 .build();
         return Result.success(userLoginvo);
+    }
+
+    /**
+     * 用户端查询分类和套餐信息
+     * @param type
+     * @return
+     */
+    @GetMapping("/user/category/list")
+    public Result<Category[]> getCategoryByType(Integer type){
+        log.info("用户端查询分类和套餐信息{}",type);
+        Category[] categories= categoryService.getCateListByType(type);
+        return Result.success(categories);
     }
 }
