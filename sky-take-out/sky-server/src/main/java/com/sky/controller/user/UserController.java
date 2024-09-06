@@ -8,12 +8,15 @@ package com.sky.controller.user;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.Category;
+import com.sky.entity.Dish;
 import com.sky.entity.User;
+import com.sky.mapper.DishMapper;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
 import com.sky.service.UserService;
 import com.sky.utils.JwtUtil;
+import com.sky.vo.DishVO;
 import com.sky.vo.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,8 @@ public class UserController {
     private CategoryService categoryService;
     @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
      * 用户端登录
@@ -74,5 +79,16 @@ public class UserController {
         log.info("用户端查询分类和套餐信息{}",type);
         Category[] categories= categoryService.getCateListByType(type);
         return Result.success(categories);
+    }
+
+    /**
+     * 查询分类id下的所有菜品和对应的口味
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/user/dish/list")
+    public Result<DishVO[]> getDishAndFlavorsByCategoryId(Long categoryId){
+        DishVO[] dishVOS=userService.getDishAndFlavorsByCategoryId(categoryId);
+        return Result.success(dishVOS);
     }
 }

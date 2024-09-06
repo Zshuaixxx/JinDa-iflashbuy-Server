@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
+import com.sky.vo.DishVO;
 
 /**
  * @author 帅的被人砍
@@ -15,4 +16,11 @@ public interface UserService {
      * @return
      */
     User wxlogin(UserLoginDTO userLoginDTO);
+
+    /**
+     * 查询分类id下的所有菜品和对应的口味
+     * @param categoryId
+     * @return
+     */
+    DishVO[] getDishAndFlavorsByCategoryId(Long categoryId);
 }

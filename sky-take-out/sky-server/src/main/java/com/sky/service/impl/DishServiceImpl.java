@@ -104,7 +104,7 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * 根据id查询菜品 包括菜品关联的口味
+     * 根据菜品id查询菜品 包括菜品关联的口味
      * @param id
      * @return
      */
