@@ -24,6 +24,8 @@ import com.sky.vo.DishVO;
 import com.sky.vo.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -47,6 +49,8 @@ public class UserController {
     private SetmealService setmealService;
     @Autowired
     private SetmealDishService setmealDishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 用户端登录
@@ -92,18 +96,30 @@ public class UserController {
     @GetMapping("/user/dish/list")
     public Result<DishVO[]> getDishAndFlavorsByCategoryId(Long categoryId){
         log.info("用户查询菜品分类id下的所有菜品和对应的口味{}",categoryId);
+        //构造redis中的key，规则：dish_分类id
+        String key = "dish_"+categoryId;
+
+        //查询redis中是否存在菜品数据
+        DishVO[] list= (DishVO[]) redisTemplate.opsForValue().get(key);
+        if(list != null && list.length> 0) {
+            //如果存在，直接返回，无须查询数据库
+            return Result.success(list);
+        }
+
         DishVO[] dishVOS=userService.getDishAndFlavorsByCategoryId(categoryId);
+        redisTemplate.opsForValue().set(key, dishVOS);
         return Result.success(dishVOS);
     }
 
     /**
-     * 根据分类id查询套餐信息
+     * 根据分类中套餐分类的id查询套餐信息
      * @param categoryId
      * @return
      */
+    @Cacheable(cacheNames = "setmealCache",key = "#categoryId")
     @GetMapping("/user/setmeal/list")
     public Result<Setmeal[]> getSetmealByCategoryId(Long categoryId){
-        log.info("用户根据分类id查询套餐信息{}",categoryId);
+        log.info("用户根据分类中套餐分类的id查询套餐信息{}",categoryId);
         Setmeal[] setmeals=setmealService.getSetmealByCategoryId(categoryId);
         return Result.success(setmeals);
     }
