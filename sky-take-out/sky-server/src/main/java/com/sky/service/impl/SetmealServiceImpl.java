@@ -82,7 +82,7 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public SetmealVO getSetmealById(Integer id) {
         //现查套餐 再查菜品
-        SetmealVO setmealVO=setmealMapper.getSetmealById(id);
+        SetmealVO setmealVO=setmealMapper.getSetmealById(Long.valueOf(id));
         setmealVO.setSetmealDishes(setmealDishMapper.getSetmealDishBySetmealId(id));
         return setmealVO;
     }
@@ -143,7 +143,7 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public Result deleteSetmealsByIds(List<Integer> ids) {
         ids.forEach(id->{
-            SetmealVO setmealVO=setmealMapper.getSetmealById(id);
+            SetmealVO setmealVO=setmealMapper.getSetmealById(Long.valueOf(id));
             if(setmealVO.getStatus() == StatusConstant.ENABLE){
                 throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
             }

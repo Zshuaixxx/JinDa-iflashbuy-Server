@@ -9,6 +9,7 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public interface SetmealMapper {
      * @param id
      * @return
      */
-    SetmealVO getSetmealById(Integer id);
+    SetmealVO getSetmealById(Long id);
 
     /**
      * 更新套餐表信息
@@ -59,4 +60,7 @@ public interface SetmealMapper {
      */
     @Delete("delete from setmeal where id=#{setmealId}")
     void deleteById(Integer setmealId);
+
+    @Select("select * from setmeal where id=#{setmealId}")
+    Setmeal getById(Long setmealId);
 }
