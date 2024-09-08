@@ -6,10 +6,7 @@ import com.sky.result.Result;
 import com.sky.service.impl.ShopCartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,4 +46,13 @@ public class ShopCartController {
         return Result.success(shopCartService.viewShoppingCart());
     }
 
+    /**
+     * 清空购物车
+     * @return
+     */
+    @DeleteMapping("/user/shoppingCart/clean")
+    public Result cleanShopCart(){
+        shopCartService.cleanShopCart();
+        return Result.success();
+    }
 }

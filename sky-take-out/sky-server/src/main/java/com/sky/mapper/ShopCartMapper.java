@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
@@ -32,4 +33,11 @@ public interface ShopCartMapper {
      * @param shoppingCart
      */
     void addShopCartItem(ShoppingCart shoppingCart);
+
+    /**
+     * 根据userId删除用户的购物车数据
+     * @param userId
+     */
+    @Delete("delete from shopping_cart where user_id=#{userId}")
+    void cleanShopCartByUserId(Long userId);
 }

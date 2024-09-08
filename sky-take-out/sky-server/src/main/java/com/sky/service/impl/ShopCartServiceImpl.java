@@ -75,4 +75,13 @@ public class ShopCartServiceImpl implements ShopCartService{
         return shopCartMapper.getShopCartItems(shoppingCart);
     }
 
+    /**
+     * 清空购物车
+     */
+    @Override
+    public void cleanShopCart() {
+        Long userId = BaseContext.getCurrentId();
+        shopCartMapper.cleanShopCartByUserId(userId);
+    }
+
 }
