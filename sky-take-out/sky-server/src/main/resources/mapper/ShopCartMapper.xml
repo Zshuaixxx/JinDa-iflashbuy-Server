@@ -23,4 +23,22 @@
         insert into shopping_cart(name, image, user_id, dish_id, setmeal_id, dish_flavor, amount, create_time) VALUES
         (#{name},#{image},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{amount},#{createTime})
     </insert>
+
+    <delete id="deleteShopCartItem">
+        delete from shopping_cart
+        <where>
+            <if test="dishId != null">
+                dish_id=#{dishId}
+            </if>
+            <if test="setmealId != null">
+                and setmeal_id=#{setmealId}
+            </if>
+            <if test="userId != null">
+                and user_id=#{userId}
+            </if>
+            <if test="dishFlavor != null">
+                and dish_flavor=#{dishFlavor}
+            </if>
+        </where>
+    </delete>
 </mapper>

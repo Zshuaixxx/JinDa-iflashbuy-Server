@@ -40,4 +40,10 @@ public interface ShopCartMapper {
      */
     @Delete("delete from shopping_cart where user_id=#{userId}")
     void cleanShopCartByUserId(Long userId);
+
+    /**
+     * 删除购物车的一条数据 userId 用户id 菜品id  套餐id 口味
+     * @param shoppingCart
+     */
+    void deleteShopCartItem(ShoppingCart shoppingCart);
 }

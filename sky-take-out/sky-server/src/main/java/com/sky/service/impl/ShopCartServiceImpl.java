@@ -84,4 +84,29 @@ public class ShopCartServiceImpl implements ShopCartService{
         shopCartMapper.cleanShopCartByUserId(userId);
     }
 
+    /**
+     * 删除购物车中某件菜品或者套餐
+     */
+    @Override
+    public void deleteShopCartItem(ShoppingCartDTO shoppingCartDTO) {
+        //先把这个菜品或者套餐查出来
+        ShoppingCart shoppingCart=new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        shoppingCart.setUserId(BaseContext.getCurrentId());
+
+        List<ShoppingCart> shoppingCarts=shopCartMapper.getShopCartItems(shoppingCart);
+        if(shoppingCarts != null && shoppingCarts.size()>0){
+            Integer number = shoppingCarts.get(0).getNumber();
+            if(number == 1){
+                //数量为1 -》 删除
+                shopCartMapper.deleteShopCartItem(shoppingCarts.get(0));
+            }
+            else{
+                // 数量大于1 -》 减一
+                shoppingCarts.get(0).setNumber(number-1);
+                shopCartMapper.updateShopCartItem(shoppingCarts.get(0));
+            }
+        }
+    }
+
 }
