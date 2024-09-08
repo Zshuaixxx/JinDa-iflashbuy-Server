@@ -8,6 +8,7 @@ import com.sky.entity.ShoppingCart;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.ShopCartMapper;
+import com.sky.service.ShopCartService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.List;
  * @create 2024-09-07 20:33
  */
 @Service
-public class ShopCartServiceImpl implements ShopCartService{
+public class ShopCartServiceImpl implements ShopCartService {
 
     @Autowired
     private ShopCartMapper shopCartMapper;
