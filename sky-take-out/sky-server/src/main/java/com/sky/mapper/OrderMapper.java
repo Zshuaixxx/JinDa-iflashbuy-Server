@@ -9,6 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * @author 帅的被人砍
  * @create 2024-09-11 13:34
@@ -59,4 +62,13 @@ public interface OrderMapper {
      */
     @Select("select count(id) from orders where status = #{status}")
     Integer countStatus(Integer status);
+
+    /**
+     * 查询超时订单
+     * @param pendingPayment
+     * @param time
+     * @return
+     */
+    @Select("select * from orders where  status=#{pendingPayment} and order_time < #{time}")
+    List<Orders> getTimeOutOrder(Integer pendingPayment, LocalDateTime time);
 }
