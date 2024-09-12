@@ -17,9 +17,11 @@ import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShopCartMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPageViewVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.admin_OrderPageViewVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,6 +124,39 @@ public class OrderServiceImpl implements OrderService {
             OrderPageViewVO vo=new OrderPageViewVO();
             BeanUtils.copyProperties(orders,vo);
             vo.setOrderDetailList(orderDetailMapper.getDetailByOrderId(vo.getId()));
+            ans.add(vo);
+        });
+
+        long total=page.getTotal();
+        return new PageResult(total,ans);
+    }
+
+    /**
+     * 查询历史订单  管理端
+     *
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult admin_pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
+
+        //先查订单表
+        Page<Orders> page =orderMapper.pageViewHistoryOrders(ordersPageQueryDTO);
+
+        //再查orderDetail
+        List<Orders> ordersList = page.getResult();
+        List<admin_OrderPageViewVO> ans=new ArrayList<>();
+        ordersList.forEach(orders -> {
+            admin_OrderPageViewVO vo=new admin_OrderPageViewVO();
+            BeanUtils.copyProperties(orders,vo);
+            List<OrderDetail> detail = orderDetailMapper.getDetailByOrderId(vo.getId());
+            StringBuilder orderDishes = new StringBuilder();
+            detail.forEach(orderDetail -> {
+                orderDishes.append(orderDetail.getName()).append(",");
+            });
+            String result = orderDishes.toString();
+            vo.setOrderDishes(result);
             ans.add(vo);
         });
 
