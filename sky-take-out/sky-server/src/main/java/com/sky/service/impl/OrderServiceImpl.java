@@ -1,7 +1,10 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
@@ -13,7 +16,9 @@ import com.sky.mapper.AddressBookMapper;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShopCartMapper;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderPageViewVO;
 import com.sky.vo.OrderSubmitVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,5 +102,30 @@ public class OrderServiceImpl implements OrderService {
                 .orderAmount(orders.getAmount())
                 .build();
         return orderSubmitVO;
+    }
+
+    /**
+     * 查询历史订单  用户端 order orderDetail查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
+
+        //先查订单表
+        Page<Orders> page =orderMapper.pageViewHistoryOrders(ordersPageQueryDTO);
+        //再查orderDetail
+        List<Orders> ordersList = page.getResult();
+        List<OrderPageViewVO> ans=new ArrayList<>();
+        ordersList.forEach(orders -> {
+            OrderPageViewVO vo=new OrderPageViewVO();
+            BeanUtils.copyProperties(orders,vo);
+            vo.setOrderDetailList(orderDetailMapper.getDetailByOrderId(vo.getId()));
+            ans.add(vo);
+        });
+
+        long total=page.getTotal();
+        return new PageResult(total,ans);
     }
 }

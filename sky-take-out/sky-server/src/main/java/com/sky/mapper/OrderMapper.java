@@ -1,7 +1,10 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.Orders;
+import com.sky.vo.OrderPageViewVO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -24,4 +27,12 @@ public interface OrderMapper {
      * @param status
      */
     void updateOrderStatus(String orderNumber, int status);
+
+
+    /**
+     * 用户端查询历史订单 userid status page pagesize
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    Page<Orders> pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 }

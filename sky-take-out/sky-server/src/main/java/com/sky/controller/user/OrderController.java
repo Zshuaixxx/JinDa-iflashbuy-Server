@@ -5,12 +5,16 @@ package com.sky.controller.user;
  * @create 2024-09-11 13:22
  */
 
+import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderSubmitVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,4 +41,16 @@ public class OrderController {
         return Result.success(orderSubmitVO);
     }
 
+    /**
+     * 用户查询历史订单 page pageSize status userId
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @GetMapping("/user/order/historyOrders")
+    public Result<PageResult> pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO){
+        log.info("用户端查询历史订单：{}",ordersPageQueryDTO);
+        //用户端查询需加入userid  管理端无需
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+        return Result.success(orderService.pageViewHistoryOrders(ordersPageQueryDTO));
+    }
 }
