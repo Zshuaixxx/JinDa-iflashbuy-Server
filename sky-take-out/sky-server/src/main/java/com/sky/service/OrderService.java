@@ -5,6 +5,7 @@ import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 
 /**
  * @author 帅的被人砍
@@ -33,4 +34,11 @@ public interface OrderService {
      * @return
      */
     PageResult admin_pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 查询订单详情
+     * @param id
+     * @return
+     */
+    OrderVO details(Long id);
 }

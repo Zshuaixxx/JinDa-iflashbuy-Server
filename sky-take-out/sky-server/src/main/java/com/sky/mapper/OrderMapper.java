@@ -6,6 +6,7 @@ import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderPageViewVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @author 帅的被人砍
@@ -35,4 +36,11 @@ public interface OrderMapper {
      * @return
      */
     Page<Orders> pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 根据id查询订单
+     * @param id
+     */
+    @Select("select * from orders where id=#{id}")
+    Orders getById(Long id);
 }
