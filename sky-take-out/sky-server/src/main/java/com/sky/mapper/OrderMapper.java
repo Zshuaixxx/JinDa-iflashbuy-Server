@@ -7,6 +7,7 @@ import com.sky.entity.Orders;
 import com.sky.vo.OrderPageViewVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @author 帅的被人砍
@@ -23,7 +24,7 @@ public interface OrderMapper {
 
 
     /**
-     * 更新订单状态
+     * 根据订单号更新订单状态
      * @param orderNumber
      * @param status
      */
@@ -43,4 +44,12 @@ public interface OrderMapper {
      */
     @Select("select * from orders where id=#{id}")
     Orders getById(Long id);
+
+    /**
+     * 根据id更新订单状态
+     * @param id
+     * @param i
+     */
+    @Update("update orders set status=#{i} where id=#{id}")
+    void updateOrderStatusById(Long id, int i);
 }

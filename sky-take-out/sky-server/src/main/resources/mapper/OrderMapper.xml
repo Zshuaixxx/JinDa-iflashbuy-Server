@@ -38,7 +38,7 @@
                 and order_time &lt; #{endTime}
             </if>
         </where>
-        order by order_time
+        order by order_time desc
     </select>
 
 
