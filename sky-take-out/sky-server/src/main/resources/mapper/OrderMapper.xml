@@ -11,4 +11,7 @@
              #{payStatus},#{amount},#{remark},#{phone},#{address},#{consignee},#{estimatedDeliveryTime},
              #{deliveryStatus},#{packAmount},#{tablewareNumber},#{tablewareStatus})
     </insert>
+    <update id="updateOrderStatus">
+        update orders set status=#{status} where number= #{orderNumber}
+    </update>
 </mapper>

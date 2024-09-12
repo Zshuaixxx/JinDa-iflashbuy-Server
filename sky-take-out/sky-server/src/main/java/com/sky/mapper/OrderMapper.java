@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,4 +16,12 @@ public interface OrderMapper {
      * @param orders
      */
     void insertOrder(Orders orders);
+
+
+    /**
+     * 更新订单状态
+     * @param orderNumber
+     * @param status
+     */
+    void updateOrderStatus(String orderNumber, int status);
 }
