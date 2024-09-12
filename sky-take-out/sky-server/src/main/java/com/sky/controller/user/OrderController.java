@@ -60,6 +60,7 @@ public class OrderController {
      */
     @GetMapping("/user/order/orderDetail/{id}")
     public Result<OrderVO> details(@PathVariable("id") Long id) {
+        log.info("用户查看订单详情：{}",id);
         OrderVO orderVO = orderService.details(id);
         return Result.success(orderVO);
     }
@@ -71,7 +72,15 @@ public class OrderController {
      */
     @PutMapping("/user/order/cancel/{id}")
     public Result cancelOrder(@PathVariable Long id){
+        log.info("用户取消订单：{}",id);
         orderService.cancelOrder(id);
+        return Result.success();
+    }
+
+    @PostMapping("/user/order/repetition/{id}")
+    public Result againOrder(@PathVariable Long id){
+        log.info("用户再来一单：{}",id);
+        orderService.againOrder(id);
         return Result.success();
     }
 }
