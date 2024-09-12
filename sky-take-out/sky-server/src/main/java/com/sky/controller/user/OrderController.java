@@ -77,6 +77,11 @@ public class OrderController {
         return Result.success();
     }
 
+    /**
+     * 用户在来一单
+     * @param id
+     * @return
+     */
     @PostMapping("/user/order/repetition/{id}")
     public Result againOrder(@PathVariable Long id){
         log.info("用户再来一单：{}",id);
