@@ -5,12 +5,14 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderPageViewVO;
+import com.sky.vo.TurnoverReportVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 帅的被人砍
@@ -71,4 +73,12 @@ public interface OrderMapper {
      */
     @Select("select * from orders where  status=#{pendingPayment} and order_time < #{time}")
     List<Orders> getTimeOutOrder(Integer pendingPayment, LocalDateTime time);
+
+
+    /**
+     * 根据日期和订单状态查询营业额
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map map);
 }
