@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.annotation.Log;
 import com.sky.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class ShopController {
      * @param status
      * @return
      */
+    @Log
     @PutMapping("/admin/shop/{status}")
     public Result setShopStatus(@PathVariable Integer status){
         log.info("设置店铺营业状态{}",status);

@@ -5,6 +5,7 @@ package com.sky.controller.admin;
  * @create 2024-09-04 17:03
  */
 
+import com.sky.annotation.Log;
 import com.sky.result.Result;
 import com.sky.utils.AliOssUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class CommonController {
      * @param file
      * @return
      */
+    @Log
     @PostMapping("/admin/common/upload")
     public Result<String> uploadFile(MultipartFile file){
         log.info("文件上传{}",file);

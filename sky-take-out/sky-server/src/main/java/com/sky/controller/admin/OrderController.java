@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.annotation.Log;
 import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
@@ -63,6 +64,7 @@ public class OrderController {
      *
      * @return
      */
+    @Log
     @PutMapping("/admin/order/confirm")
     public Result confirm(@RequestBody OrdersConfirmDTO ordersConfirmDTO) {
         orderService.confirm(ordersConfirmDTO);
@@ -74,6 +76,7 @@ public class OrderController {
      *
      * @return
      */
+    @Log
     @PutMapping("/admin/order/rejection")
     public Result rejection(@RequestBody OrdersRejectionDTO ordersRejectionDTO) throws Exception {
         orderService.rejection(ordersRejectionDTO);
@@ -85,6 +88,7 @@ public class OrderController {
      *
      * @return
      */
+    @Log
     @PutMapping("/admin/order/cancel")
     public Result cancel(@RequestBody OrdersCancelDTO ordersCancelDTO) throws Exception {
         orderService.cancel(ordersCancelDTO);
@@ -96,6 +100,7 @@ public class OrderController {
      *
      * @return
      */
+    @Log
     @PutMapping("/admin/order/delivery/{id}")
     public Result delivery(@PathVariable("id") Long id) {
         orderService.delivery(id);
@@ -107,6 +112,7 @@ public class OrderController {
      *
      * @return
      */
+    @Log
     @PutMapping("/admin/order/complete/{id}")
     public Result complete(@PathVariable("id") Long id) {
         orderService.complete(id);

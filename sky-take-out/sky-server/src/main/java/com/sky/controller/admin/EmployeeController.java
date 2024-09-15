@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.annotation.Log;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
@@ -77,6 +78,7 @@ public class EmployeeController {
      * @param employeeDTO
      * @return
      */
+    @Log
     @PostMapping()
     private Result addEmp(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增员工{}",employeeDTO);
@@ -102,6 +104,7 @@ public class EmployeeController {
      * @param id
      * @return
      */
+    @Log
     @PostMapping("/status/{status}")
     public Result setEmpStatus(@PathVariable Integer status ,Long id){
         employeeService.setEmpStatus(status,id);
@@ -125,6 +128,7 @@ public class EmployeeController {
      * @param employeeDTO
      * @return
      */
+    @Log
     @PutMapping
     public Result updateEmpInfo(@RequestBody EmployeeDTO employeeDTO){
         log.info("编辑用户信息{}",employeeDTO);

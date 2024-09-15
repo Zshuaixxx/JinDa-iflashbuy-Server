@@ -268,8 +268,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 拒单
-     *
-     * @param ordersRejectionDTO
+     * @param ordersRejectionDTO DTo
      */
     public void rejection(OrdersRejectionDTO ordersRejectionDTO) throws Exception {
         // 根据id查询订单
@@ -371,6 +370,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end) {
+        //TODO  sql优化
         //存放日期
         List<LocalDate> dateList=new ArrayList<>();
         dateList.add(begin);

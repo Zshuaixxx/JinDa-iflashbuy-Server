@@ -5,6 +5,7 @@ package com.sky.controller.admin;
  * @create 2024-09-05 22:44
  */
 
+import com.sky.annotation.Log;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
@@ -33,6 +34,7 @@ public class SetmealController {
      * @param setmealDTO
      * @return
      */
+    @Log
     @CacheEvict(cacheNames = "setmealCache" ,key = "#setmealDTO.categoryId")
     @PostMapping("/admin/setmeal")
     public Result addSetmeal(@RequestBody SetmealDTO setmealDTO){
@@ -68,6 +70,7 @@ public class SetmealController {
      * @param setmealDTO
      * @return
      */
+    @Log
     @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     @PutMapping("/admin/setmeal")
     public Result updateSetmeal(@RequestBody SetmealDTO setmealDTO){
@@ -82,6 +85,7 @@ public class SetmealController {
      * @param id
      * @return
      */
+    @Log
     @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     @PostMapping("/admin/setmeal/status/{status}")
     public Result updateSetmealStatus(@PathVariable Integer status,Integer id){
@@ -95,6 +99,7 @@ public class SetmealController {
      * @param ids
      * @return
      */
+    @Log
     @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     @DeleteMapping("/admin/setmeal")
     public Result deleteSetmealsByIds(@RequestParam List<Integer> ids){

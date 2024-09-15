@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.annotation.Log;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
@@ -45,6 +46,7 @@ public class CategoryController {
      * @param categoryDTO
      * @return
      */
+    @Log
     @PostMapping("/admin/category")
     public Result addCategory(@RequestBody CategoryDTO categoryDTO){
         log.info("新增分类信息{}",categoryDTO);
@@ -58,6 +60,7 @@ public class CategoryController {
      * @param id
      * @return
      */
+    @Log
     @PostMapping("/admin/category/status/{status}")
     public Result setCateStatus(@PathVariable String status,Long id){
         log.info("设置分类状态{}，{}",status,id);
@@ -69,6 +72,7 @@ public class CategoryController {
      * 修改分类信息
      * @param categoryDTO
      */
+    @Log
     @PutMapping("/admin/category")
     public Result updateCate(@RequestBody CategoryDTO categoryDTO){
         log.info("修改分类信息{}",categoryDTO);
@@ -82,6 +86,7 @@ public class CategoryController {
      * @return
      */
 //    当前数据库对应一个菜品只能有一个分类  删除分类时注意处理菜品
+    @Log
     @DeleteMapping("/admin/category")
     public Result deleteCate(Long id){
         log.info("删除分类{}",id);
