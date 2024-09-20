@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableCaching//缓存功能
 @EnableScheduling//开启任务调度
 public class SkyApplication {
-//    TODO 添加记录操作日志  添加骑手端  商家骑手自动接单功能  接口设计全部改数组
+//    TODO 添加记录over操作日志  添加骑手端  商家骑手自动接单功能  接口设计全部改数组
     public static void main(String[] args) {
         SpringApplication.run(SkyApplication.class, args);
         log.info("server started");

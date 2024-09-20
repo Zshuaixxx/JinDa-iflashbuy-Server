@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
  * @create 2024-09-15 10:26
  */
 
+/**
+ * 操作日志实体类
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
