@@ -1,6 +1,7 @@
 package com.sky.service;
 
 import com.sky.dto.RiderPasswordLoginDTO;
+import com.sky.dto.RiderWeixinLoginDTO;
 import com.sky.vo.RiderLoginVO;
 
 /**
@@ -14,4 +15,11 @@ public interface RiderService {
      * @param riderPasswordLoginDTO
      */
     RiderLoginVO riderPasswordLogin(RiderPasswordLoginDTO riderPasswordLoginDTO);
+
+    /**
+     * 骑手微信登录
+     * @param riderWeixinLoginDTO
+     * @return
+     */
+    RiderLoginVO riderWeixinLogin(RiderWeixinLoginDTO riderWeixinLoginDTO);
 }

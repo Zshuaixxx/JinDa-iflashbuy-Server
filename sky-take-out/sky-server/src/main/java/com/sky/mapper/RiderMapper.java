@@ -24,4 +24,18 @@ public interface RiderMapper  {
      */
     @Select("select * from rider where phone=#{phone}")
     Rider selectByPhone(String phone);
+
+    /**
+     * 根据openid查询骑手
+     * @param openid
+     * @return
+     */
+    @Select("select * from rider where openid=#{openid}")
+    Rider selectByOpenid(String openid);
+
+    /**
+     * 骑手表新增
+     * @param rider
+     */
+    void insert(Rider rider);
 }

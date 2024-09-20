@@ -55,4 +55,8 @@ public class Rider {
      */
     private String avatar;
 
+    /**
+     * 骑手名称
+     */
+    private String name;
 }

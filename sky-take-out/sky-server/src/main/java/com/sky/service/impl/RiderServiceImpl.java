@@ -1,19 +1,25 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.RiderPasswordLoginDTO;
+import com.sky.dto.RiderWeixinLoginDTO;
 import com.sky.entity.Rider;
 import com.sky.exception.AccountNotExit;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.RiderMapper;
 import com.sky.properties.JwtProperties;
+import com.sky.properties.WeChatProperties;
 import com.sky.service.RiderService;
+import com.sky.utils.HttpClientUtil;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.RiderLoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +34,10 @@ public class RiderServiceImpl implements RiderService {
     private RiderMapper riderMapper;
     @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private WeChatProperties weChatProperties;
+
+    private static final String WX_LOGIN="https://api.weixin.qq.com/sns/jscode2session";
 
     /**
      * 骑手密码登录
@@ -53,5 +63,55 @@ public class RiderServiceImpl implements RiderService {
                 .token(token)
                 .build();
         return riderLoginVO;
+    }
+
+    /**
+     * 骑手微信登录
+     * @param riderWeixinLoginDTO
+     * @return
+     */
+    @Override
+    public RiderLoginVO riderWeixinLogin(RiderWeixinLoginDTO riderWeixinLoginDTO) {
+        //根据code获取openid
+        String openid=getopenid(riderWeixinLoginDTO.getCode());
+        //判断有没有该骑手
+        Rider rider=riderMapper.selectByOpenid(openid);
+        if(rider == null){
+            rider=Rider.builder()
+                    .openid(openid)
+                    .avatar(riderWeixinLoginDTO.getAvatar())
+                    .name(riderWeixinLoginDTO.getName())
+                    .registerTime(LocalDateTime.now())
+                    .build();
+            riderMapper.insert(rider);
+        }
+        //生成token
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.USER_ID,rider.getId());
+        String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
+        //返回结果
+        return RiderLoginVO.builder()
+                .id(rider.getId())
+                .openid(openid)
+                .token(token)
+                .build();
+    }
+
+    /**
+     * 调用微信api获取openid
+     * @param code
+     * @return
+     */
+    private String getopenid(String code) {
+        //调用微信接口服务，获得当前微信用户的openid
+        Map<String, String> map = new HashMap<>();
+        map.put("appid", weChatProperties.getAppid());
+        map.put("secret", weChatProperties.getSecret());
+        map.put("js_code", code);
+        map.put("grant_type", "authorization_code");
+        String json = HttpClientUtil.doGet(WX_LOGIN, map);
+        JSONObject jsonObject = JSON.parseObject(json);
+        String openid = jsonObject.getString("openid");
+        return openid;
     }
 }
