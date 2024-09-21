@@ -4,6 +4,9 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * Jwt配置属性 密匙 时间 token名
+ */
 @Component
 @ConfigurationProperties(prefix = "sky.jwt")
 @Data
@@ -23,4 +26,10 @@ public class JwtProperties {
     private long userTtl;
     private String userTokenName;
 
+    /**
+     * 用户端微信用户生成jwt令牌相关配置
+     */
+    private String riderSecretKey;
+    private long riderTtl;
+    private String riderTokenName;
 }

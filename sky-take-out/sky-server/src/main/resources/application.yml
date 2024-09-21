@@ -45,6 +45,9 @@ sky:
     user-secret-key: itcastzxx
     user-ttl: 7200000000000
     user-token-name: authentication
+    rider-secret-key: itcastzxx
+    rider-ttl: 72000000
+    rider-token-name: token
   alioss:
     endpoint: ${sky.alioss.endpoint}
     access-key-id: ${sky.alioss.access-key-id}

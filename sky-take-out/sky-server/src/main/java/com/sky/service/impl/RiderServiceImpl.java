@@ -63,8 +63,8 @@ public class RiderServiceImpl implements RiderService {
         }
         //分配Token
         Map<String, Object> claims = new HashMap<>();
-        claims.put(JwtClaimsConstant.USER_ID,rider.getId());
-        String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
+        claims.put(JwtClaimsConstant.RIDER_ID,rider.getId());
+        String token = JwtUtil.createJWT(jwtProperties.getRiderSecretKey(), jwtProperties.getRiderTtl(), claims);
         RiderLoginVO riderLoginVO = RiderLoginVO.builder()
                 .id(rider.getId())
                 .token(token)
@@ -95,8 +95,8 @@ public class RiderServiceImpl implements RiderService {
         }
         //生成token
         Map<String, Object> claims = new HashMap<>();
-        claims.put(JwtClaimsConstant.USER_ID,rider.getId());
-        String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
+        claims.put(JwtClaimsConstant.RIDER_ID,rider.getId());
+        String token = JwtUtil.createJWT(jwtProperties.getRiderSecretKey(), jwtProperties.getRiderTtl(), claims);
         //返回结果
         return RiderLoginVO.builder()
                 .id(rider.getId())
