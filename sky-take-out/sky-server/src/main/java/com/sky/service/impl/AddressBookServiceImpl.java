@@ -4,6 +4,7 @@ import com.sky.context.BaseContext;
 import com.sky.entity.AddressBook;
 import com.sky.mapper.AddressBookMapper;
 import com.sky.service.AddressBookService;
+import com.sky.utils.AmapUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import java.util.List;
 public class AddressBookServiceImpl implements AddressBookService {
     @Autowired
     private AddressBookMapper addressBookMapper;
+    @Autowired
+    private AmapUtil amapUtil;
 
     /**
      * 条件查询
@@ -34,6 +37,12 @@ public class AddressBookServiceImpl implements AddressBookService {
     public void save(AddressBook addressBook) {
         addressBook.setUserId(BaseContext.getCurrentId());
         addressBook.setIsDefault(0);
+
+        //添加location
+        String address=addressBook.getProvinceName()+addressBook.getCityName()+addressBook.getDistrictName()+addressBook.getDetail();
+        String location = amapUtil.getLocation(address);
+        addressBook.setLocation(location);
+
         addressBookMapper.insert(addressBook);
     }
 

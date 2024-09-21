@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/**
+ * 地址薄管理
+ */
 @RestController
 @RequestMapping("/user/addressBook")
 @Api(tags = "C端地址簿接口")

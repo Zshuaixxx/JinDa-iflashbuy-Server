@@ -25,6 +25,8 @@ public class MessageConstant {
     public static final String ORDER_STATUS_ERROR = "订单状态错误";
     public static final String ORDER_NOT_FOUND = "订单不存在";
     public static final String ACCOUNT_ALREADY_EXIT = "账号已存在";
+    public static final String ADDRESS_NOT_EXIT="地址不存在" ;
+
 
 
 }
