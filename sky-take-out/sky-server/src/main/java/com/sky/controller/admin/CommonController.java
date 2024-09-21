@@ -31,7 +31,6 @@ public class CommonController {
      * @param file
      * @return
      */
-    @Log
     @PostMapping("/admin/common/upload")
     public Result<String> uploadFile(MultipartFile file){
         log.info("文件上传{}",file);

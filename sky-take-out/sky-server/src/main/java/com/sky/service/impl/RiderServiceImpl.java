@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.dto.RiderPasswordLoginDTO;
+import com.sky.dto.RiderRegisterDTO;
 import com.sky.dto.RiderWeixinLoginDTO;
 import com.sky.entity.Rider;
+import com.sky.exception.AccountAlreadyExitException;
 import com.sky.exception.AccountNotExit;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.RiderMapper;
@@ -16,8 +19,11 @@ import com.sky.service.RiderService;
 import com.sky.utils.HttpClientUtil;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.RiderLoginVO;
+import com.sky.vo.RiderRegisterVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -50,8 +56,9 @@ public class RiderServiceImpl implements RiderService {
         if(rider==null){
             throw new AccountNotExit(MessageConstant.ACCOUNT_NOT_FOUND);
         }
-        //校验密码 TODO 注册功能开发后密码需加密校验
-        if(!rider.getPassword().equals(riderPasswordLoginDTO.getPassword())){
+        //校验密码 TO完成DO 注册功能开发后密码需加密校验
+        String password =DigestUtils.md5DigestAsHex(riderPasswordLoginDTO.getPassword().getBytes());
+        if(!password.equals(rider.getPassword())){
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
         //分配Token
@@ -83,6 +90,7 @@ public class RiderServiceImpl implements RiderService {
                     .name(riderWeixinLoginDTO.getName())
                     .registerTime(LocalDateTime.now())
                     .build();
+            rider.setName("微信用户"+rider.getId());
             riderMapper.insert(rider);
         }
         //生成token
@@ -94,6 +102,31 @@ public class RiderServiceImpl implements RiderService {
                 .id(rider.getId())
                 .openid(openid)
                 .token(token)
+                .build();
+    }
+
+    /**
+     * 骑手注册
+     * @param riderRegisterDTO
+     * @return
+     */
+    @Override
+    public RiderRegisterVO riderRegister(RiderRegisterDTO riderRegisterDTO) {
+        //判断手机号是否已经注册
+        Rider rider=riderMapper.selectByPhone(riderRegisterDTO.getPhone());
+        if(rider!=null){
+            throw new AccountAlreadyExitException(MessageConstant.ACCOUNT_ALREADY_EXIT);
+        }
+        //注册
+        //密码需要加密
+        rider = new Rider();
+        BeanUtils.copyProperties(riderRegisterDTO,rider);
+        rider.setPassword(DigestUtils.md5DigestAsHex(rider.getPassword().getBytes()));
+        rider.setRegisterTime(LocalDateTime.now());
+        riderMapper.insert(rider);
+        //返回注册结果
+        return RiderRegisterVO.builder()
+                .id(rider.getId())
                 .build();
     }
 

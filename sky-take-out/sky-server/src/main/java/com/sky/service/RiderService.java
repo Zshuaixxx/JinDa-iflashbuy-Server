@@ -1,8 +1,10 @@
 package com.sky.service;
 
 import com.sky.dto.RiderPasswordLoginDTO;
+import com.sky.dto.RiderRegisterDTO;
 import com.sky.dto.RiderWeixinLoginDTO;
 import com.sky.vo.RiderLoginVO;
+import com.sky.vo.RiderRegisterVO;
 
 /**
  * @author 帅的被人砍
@@ -22,4 +24,11 @@ public interface RiderService {
      * @return
      */
     RiderLoginVO riderWeixinLogin(RiderWeixinLoginDTO riderWeixinLoginDTO);
+
+    /**
+     * 骑手注册
+     * @param riderRegisterDTO
+     * @return
+     */
+    RiderRegisterVO riderRegister(RiderRegisterDTO riderRegisterDTO);
 }
