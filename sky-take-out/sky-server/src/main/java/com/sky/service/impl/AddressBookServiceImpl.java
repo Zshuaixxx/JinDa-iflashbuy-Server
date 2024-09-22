@@ -5,6 +5,7 @@ import com.sky.entity.AddressBook;
 import com.sky.mapper.AddressBookMapper;
 import com.sky.service.AddressBookService;
 import com.sky.utils.AmapUtil;
+import com.sky.utils.QQmapUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class AddressBookServiceImpl implements AddressBookService {
     private AddressBookMapper addressBookMapper;
     @Autowired
     private AmapUtil amapUtil;
+    @Autowired
+    private QQmapUtil qqmapUtil;
 
     /**
      * 条件查询
@@ -40,9 +43,10 @@ public class AddressBookServiceImpl implements AddressBookService {
 
         //添加location
         String address=addressBook.getProvinceName()+addressBook.getCityName()+addressBook.getDistrictName()+addressBook.getDetail();
-        String location = amapUtil.getLocation(address);
-        addressBook.setLocation(location);
-
+//        String location = amapUtil.getLocation(address);
+        List<String> locationAndAdcode = qqmapUtil.getLocation(address);
+        addressBook.setLocation(locationAndAdcode.get(0));
+        addressBook.setAdcode(locationAndAdcode.get(1));
         addressBookMapper.insert(addressBook);
     }
 

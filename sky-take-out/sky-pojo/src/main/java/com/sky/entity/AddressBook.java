@@ -61,4 +61,6 @@ public class AddressBook implements Serializable {
 
     //经纬度
     private String location;
+    //行政区划编码
+    private String adcode;
 }

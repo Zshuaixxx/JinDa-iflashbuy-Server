@@ -58,4 +58,6 @@ sky:
     secret: ${sky.wechat.secret}
   amap:
     key: ${sky.amap.key}
+  qqmap:
+    key: ${sky.qqmap.key}
 
