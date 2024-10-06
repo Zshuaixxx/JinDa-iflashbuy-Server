@@ -110,4 +110,11 @@ public interface OrderService {
      * @return
      */
     TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end);
+
+    /**
+     * 骑手订单广场查询订单
+     * @param riderSquareOrderDTO
+     * @return
+     */
+    PageResult pageViewRiderSquareOredr(RiderSquareOrderDTO riderSquareOrderDTO);
 }

@@ -20,6 +20,8 @@ import com.sky.mapper.ShopCartMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.temp.OrdersAndLocation;
+import com.sky.utils.QQmapUtil;
 import com.sky.vo.*;
 import com.sky.websocket.WebSocketServer;
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +58,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailMapper orderDetailMapper;
     @Autowired
     private WebSocketServer webSocketServer;
+    @Autowired
+    private QQmapUtil qqmapUtil;
 
     /**
      * 用户提交订单
@@ -399,6 +403,38 @@ public class OrderServiceImpl implements OrderService {
                 .builder()
                 .dateList(StringUtils.join(dateList,','))
                 .turnoverList(StringUtils.join(turnoverList,','))
+                .build();
+    }
+
+    /**
+     * 骑手订单广场查询订单
+     * @param riderSquareOrderDTO
+     * @return
+     */
+    @Override
+    public PageResult pageViewRiderSquareOredr(RiderSquareOrderDTO riderSquareOrderDTO) {
+        //根据adcode分页查询出附近的订单
+        PageHelper.startPage(riderSquareOrderDTO.getPage(),riderSquareOrderDTO.getPageSize());
+        Page<OrdersAndLocation> pageResult=orderMapper.pageViewOrderByAdcode(riderSquareOrderDTO);
+        long total=pageResult.getTotal();
+        List<OrdersAndLocation> records=pageResult.getResult();
+        //计算出距离和时间
+        String from = riderSquareOrderDTO.getLatitude()+","+riderSquareOrderDTO.getLongitude();
+        List<String > allTO=new ArrayList<>();
+        for (OrdersAndLocation ordersAndLocation:records){
+            allTO.add(ordersAndLocation.getLocation());
+        }
+        String to=StringUtils.join(allTO,';');
+        String mode="bicycling";
+        List<List<Double>> distanceAndDuration = qqmapUtil.getDistance(from, to, mode);
+        //返回订单列表
+        List<RiderSquareOrderVO> ans=new ArrayList<>();
+        for (int i=0;i<records.size();i++){
+            ans.add(new RiderSquareOrderVO(records.get(i),distanceAndDuration.get(i)));
+        }
+        return PageResult.builder()
+                .total(total)
+                .records(ans)
                 .build();
     }
 }

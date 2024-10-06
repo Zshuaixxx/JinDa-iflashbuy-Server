@@ -3,7 +3,9 @@ package com.sky.mapper;
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
+import com.sky.dto.RiderSquareOrderDTO;
 import com.sky.entity.Orders;
+import com.sky.temp.OrdersAndLocation;
 import com.sky.vo.OrderPageViewVO;
 import com.sky.vo.TurnoverReportVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -81,4 +83,11 @@ public interface OrderMapper {
      * @return
      */
     Double sumByMap(Map map);
+
+    /**
+     * 骑手端订单广场查询订单 page pageSize latitude longitude adcode
+     * @param riderSquareOrderDTO
+     * @return
+     */
+    Page<OrdersAndLocation> pageViewOrderByAdcode(RiderSquareOrderDTO riderSquareOrderDTO);
 }

@@ -55,6 +55,10 @@
             </if>
         </where>
     </select>
+    <select id="pageViewOrderByAdcode" resultType="com.sky.temp.OrdersAndLocation">
+        select orders.*, ab.location,ab.adcode from orders left join address_book ab on ab.id = orders.address_book_id
+        where ab.adcode=#{adcode} and orders.status=3
+    </select>
 
 
 </mapper>
