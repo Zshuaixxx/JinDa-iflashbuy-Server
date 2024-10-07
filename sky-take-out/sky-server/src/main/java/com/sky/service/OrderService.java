@@ -117,4 +117,10 @@ public interface OrderService {
      * @return
      */
     PageResult pageViewRiderSquareOredr(RiderSquareOrderDTO riderSquareOrderDTO);
+
+    /**
+     * 骑手接单
+     * @param orderId
+     */
+    void riderTakeOrder(Long orderId);
 }

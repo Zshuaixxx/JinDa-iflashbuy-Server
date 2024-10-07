@@ -6,10 +6,7 @@ import com.sky.result.Result;
 import com.sky.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author 帅的被人砍
@@ -37,4 +34,20 @@ public class OrderController {
         log.info("骑手端订单广场查询参数：{}",riderSquareOrderDTO);
         return Result.success(orderService.pageViewRiderSquareOredr(riderSquareOrderDTO));
     }
+
+
+
+    /**
+     * 骑手接单
+     * @param orderId 订单id
+     * @return
+     */
+    @PostMapping("/rider/takeOrder/{orderId}")
+    public Result riderTakeOrder(@PathVariable Long orderId){
+        log.info("骑手接单：{}",orderId);
+        orderService.riderTakeOrder(orderId);
+        return Result.success();
+    }
+
+
 }

@@ -11,6 +11,7 @@ import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
 import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.OrderBeenTaken;
 import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.AddressBookMapper;
@@ -35,10 +36,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -429,12 +427,41 @@ public class OrderServiceImpl implements OrderService {
         List<List<Double>> distanceAndDuration = qqmapUtil.getDistance(from, to, mode);
         //返回订单列表
         List<RiderSquareOrderVO> ans=new ArrayList<>();
-        for (int i=0;i<records.size();i++){
-            ans.add(new RiderSquareOrderVO(records.get(i),distanceAndDuration.get(i)));
+        //算力不足
+        if (distanceAndDuration.isEmpty()){
+            distanceAndDuration.add(Arrays.asList(0.0,0.0));
+            for (int i=0;i<records.size();i++){
+                ans.add(new RiderSquareOrderVO(records.get(i),distanceAndDuration.get(0)));
+            }
+            return PageResult.builder()
+                    .total(total)
+                    .records(ans)
+                    .build();
+        }else{
+            for (int i=0;i<records.size();i++){
+                ans.add(new RiderSquareOrderVO(records.get(i),distanceAndDuration.get(i)));
+            }
+            return PageResult.builder()
+                    .total(total)
+                    .records(ans)
+                    .build();
         }
-        return PageResult.builder()
-                .total(total)
-                .records(ans)
-                .build();
+
+    }
+
+    //TODO 线程锁的优化
+    /**
+     * 骑手接单
+     * @param orderId
+     */
+    @Override
+    public synchronized void riderTakeOrder(Long orderId) {
+        Orders orders = orderMapper.getById(orderId);
+        //判断订单状态是否为待接单
+        if(!orders.getStatus().equals(Orders.CONFIRMED)){
+            throw new OrderBeenTaken(MessageConstant.Order_Been_Taken);
+        }
+        Long riderId=BaseContext.getCurrentId();
+        orderMapper.riderTakeOrder(orderId,riderId,Orders.DELIVERY_IN_PROGRESS);
     }
 }

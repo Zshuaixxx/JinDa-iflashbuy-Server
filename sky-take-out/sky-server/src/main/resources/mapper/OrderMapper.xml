@@ -56,9 +56,11 @@
         </where>
     </select>
     <select id="pageViewOrderByAdcode" resultType="com.sky.temp.OrdersAndLocation">
-        select orders.*, ab.location,ab.adcode from orders left join address_book ab on ab.id = orders.address_book_id
-        where ab.adcode=#{adcode} and orders.status=3
+        select orders.*, address_book.location,address_book.adcode from orders left join address_book  on address_book.id = orders.address_book_id
+        where address_book.adcode=#{adcode} and orders.status=3
     </select>
 
-
+    <update id="riderTakeOrder">
+        update orders set status=#{status},rider_id=#{riderId} where id=#{orderId}
+    </update>
 </mapper>

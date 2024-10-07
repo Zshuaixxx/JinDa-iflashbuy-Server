@@ -90,4 +90,6 @@ public interface OrderMapper {
      * @return
      */
     Page<OrdersAndLocation> pageViewOrderByAdcode(RiderSquareOrderDTO riderSquareOrderDTO);
+
+    void riderTakeOrder(Long orderId, Long riderId, Integer status);
 }
