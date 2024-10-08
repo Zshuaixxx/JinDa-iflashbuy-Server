@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.*;
  * @author 帅的被人砍
  * @create 2024-09-12 17:04
  */
+
+/**
+ * 订单管理
+ */
 @Slf4j
 @RestController("adminOrderController")
 public class OrderController {
