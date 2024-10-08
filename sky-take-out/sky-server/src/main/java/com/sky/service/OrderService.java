@@ -2,10 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.*;
 import com.sky.result.PageResult;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
-import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.*;
 
 import java.time.LocalDate;
 
@@ -123,4 +120,11 @@ public interface OrderService {
      * @param orderId
      */
     void riderTakeOrder(Long orderId);
+
+    /**
+     * 骑手查看订单详情
+     * @param orderDetailDTO
+     * @return
+     */
+    OrderDetailVO viewOrderDetail(OrderDetailDTO orderDetailDTO);
 }

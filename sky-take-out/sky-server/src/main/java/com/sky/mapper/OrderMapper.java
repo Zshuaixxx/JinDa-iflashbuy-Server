@@ -91,5 +91,18 @@ public interface OrderMapper {
      */
     Page<OrdersAndLocation> pageViewOrderByAdcode(RiderSquareOrderDTO riderSquareOrderDTO);
 
+    /**
+     * 骑手接单
+     * @param orderId
+     * @param riderId
+     * @param status
+     */
     void riderTakeOrder(Long orderId, Long riderId, Integer status);
+
+    /**
+     * 根据订单id查询订单经纬度
+     * @param orderId
+     * @return
+     */
+    OrdersAndLocation getOrderLocationById(Long orderId);
 }

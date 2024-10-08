@@ -10,10 +10,7 @@ import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
-import com.sky.exception.AddressBookBusinessException;
-import com.sky.exception.OrderBeenTaken;
-import com.sky.exception.OrderBusinessException;
-import com.sky.exception.ShoppingCartBusinessException;
+import com.sky.exception.*;
 import com.sky.mapper.AddressBookMapper;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
@@ -25,6 +22,7 @@ import com.sky.temp.OrdersAndLocation;
 import com.sky.utils.QQmapUtil;
 import com.sky.vo.*;
 import com.sky.websocket.WebSocketServer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +41,7 @@ import java.util.stream.Collectors;
  * @author 帅的被人砍
  * @create 2024-09-11 13:30
  */
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -433,20 +432,15 @@ public class OrderServiceImpl implements OrderService {
             for (int i=0;i<records.size();i++){
                 ans.add(new RiderSquareOrderVO(records.get(i),distanceAndDuration.get(0)));
             }
-            return PageResult.builder()
-                    .total(total)
-                    .records(ans)
-                    .build();
         }else{
             for (int i=0;i<records.size();i++){
                 ans.add(new RiderSquareOrderVO(records.get(i),distanceAndDuration.get(i)));
             }
-            return PageResult.builder()
-                    .total(total)
-                    .records(ans)
-                    .build();
         }
-
+        return PageResult.builder()
+                .total(total)
+                .records(ans)
+                .build();
     }
 
     //TODO 线程锁的优化
@@ -463,5 +457,27 @@ public class OrderServiceImpl implements OrderService {
         }
         Long riderId=BaseContext.getCurrentId();
         orderMapper.riderTakeOrder(orderId,riderId,Orders.DELIVERY_IN_PROGRESS);
+    }
+
+
+    @Override
+    public OrderDetailVO viewOrderDetail(OrderDetailDTO orderDetailDTO) {
+        OrdersAndLocation ordersAndLocation = orderMapper.getOrderLocationById(orderDetailDTO.getOrderId());
+        if (ordersAndLocation != null) {
+            OrderDetailVO orderDetailVO =new OrderDetailVO();
+            BeanUtils.copyProperties(ordersAndLocation,orderDetailVO);
+            //计算距离
+            String from = orderDetailDTO.getLatitude()+","+orderDetailDTO.getLongitude();
+            String to=ordersAndLocation.getLocation();
+            String mode="bicycling";
+            List<List<Double>> distanceAndDuration = qqmapUtil.getDistance(from, to, mode);
+            orderDetailVO.setDistance(distanceAndDuration.get(0).get(0));
+            //菜品详情
+            List<OrderDetail> orderDetailList = orderDetailMapper.getDetailByOrderId(orderDetailDTO.getOrderId());
+            orderDetailVO.setOrderDetailList(orderDetailList);
+            return orderDetailVO;
+        }else{
+            throw new OrderNotFoundException(MessageConstant.ORDER_NOT_FOUND);
+        }
     }
 }

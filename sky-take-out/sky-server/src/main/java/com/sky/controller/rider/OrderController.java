@@ -1,9 +1,11 @@
 package com.sky.controller.rider;
 
+import com.sky.dto.OrderDetailDTO;
 import com.sky.dto.RiderSquareOrderDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderDetailVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,17 @@ public class OrderController {
         return Result.success(orderService.pageViewRiderSquareOredr(riderSquareOrderDTO));
     }
 
-
+    /**
+     * 骑手端订单详情
+     * @param orderDetailDTO
+     * @return
+     */
+    @PostMapping("/rider/order/detail")
+    public Result<OrderDetailVO> viewOrderDetail(@RequestBody OrderDetailDTO orderDetailDTO){
+        log.info("骑手端订单详情参数：{}",orderDetailDTO);
+        OrderDetailVO orderDetailVO = orderService.viewOrderDetail(orderDetailDTO);
+        return Result.success(orderDetailVO);
+    }
 
     /**
      * 骑手接单

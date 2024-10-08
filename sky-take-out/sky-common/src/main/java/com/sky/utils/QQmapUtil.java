@@ -60,6 +60,7 @@ public class QQmapUtil {
      * 批量计算距离和时间
      */
     public List<List<Double>> getDistance(String from,String to,String mode){
+        log.info("腾讯地图矩阵距离运算传入的参数,from:{},to:{},mode:{}",from,to,mode);
         List<List<Double>> answer=new ArrayList<>();
         Map<String,String> paramMap=new HashMap<>();
         paramMap.put("key",qqmapProperties.getKey());

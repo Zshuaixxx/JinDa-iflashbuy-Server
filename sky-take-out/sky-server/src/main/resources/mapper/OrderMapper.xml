@@ -63,4 +63,11 @@
     <update id="riderTakeOrder">
         update orders set status=#{status},rider_id=#{riderId} where id=#{orderId}
     </update>
+
+    <select id="getOrderLocationById" resultType="com.sky.temp.OrdersAndLocation">
+        select  orders.*,address_book.location,address_book.adcode
+        from orders left join address_book on address_book.id=orders.address_book_id
+        where orders.id=#{orderId}
+    </select>
+
 </mapper>
