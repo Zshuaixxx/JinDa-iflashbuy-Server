@@ -53,4 +53,12 @@ public class OrderDetailVO {
     private Double distance;
     //订单商品清单
     private List<OrderDetail> orderDetailList;
+    //目的地经纬度
+    private String location;
+    //行政区划编码
+    private String adcode;
+    //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
+    private Integer status;
+    //骑手id
+    private Long riderId;
 }

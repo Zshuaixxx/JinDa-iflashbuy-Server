@@ -112,4 +112,6 @@ public class OrdersAndLocation implements Serializable {
     private String location;
     //行政区划编码
     private String adcode;
+    //骑手id
+    private Long riderId;
 }
