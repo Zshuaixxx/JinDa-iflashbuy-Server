@@ -10,12 +10,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author 帅的被人砍
  * @create 2024-09-12 13:26
+ */
+
+/**
+ * 用户支付相关接口
  */
 @RestController
 public class PayController {
@@ -32,7 +37,7 @@ public class PayController {
      */
     @PutMapping("/user/order/payment")
     public Result pay(@RequestBody OrdersPaymentDTO ordersPaymentDTO){
-        orderMapper.updateOrderStatus(ordersPaymentDTO.getOrderNumber(),2);
+        orderMapper.payOrder(ordersPaymentDTO.getOrderNumber(),ordersPaymentDTO.getPayMethod(), LocalDateTime.now());
 
         //向管理端发送来单提醒
         Map map = new HashMap();

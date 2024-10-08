@@ -105,4 +105,12 @@ public interface OrderMapper {
      * @return
      */
     OrdersAndLocation getOrderLocationById(Long orderId);
+
+    /**
+     * 用户支付订单
+     * @param orderNumber
+     * @param payMethod
+     * @param now
+     */
+    void payOrder(String orderNumber, Integer payMethod, LocalDateTime now);
 }

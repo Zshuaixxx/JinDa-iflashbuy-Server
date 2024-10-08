@@ -70,4 +70,8 @@
         where orders.id=#{orderId}
     </select>
 
+    <update id="payOrder">
+        update orders set pay_status=2,pay_method=#{payMethod},checkout_time=#{now} where number=#{orderNumber}
+    </update>
+
 </mapper>
