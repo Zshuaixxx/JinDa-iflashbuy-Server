@@ -109,4 +109,6 @@ public class Orders implements Serializable {
     private Integer tablewareStatus;
     //骑手id
     private Long riderId;
+    //送达凭证
+    private String deliveryProof;
 }

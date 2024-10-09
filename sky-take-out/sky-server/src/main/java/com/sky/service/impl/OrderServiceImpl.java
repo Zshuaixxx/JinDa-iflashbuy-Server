@@ -517,4 +517,23 @@ public class OrderServiceImpl implements OrderService {
         }
         return ans;
     }
+
+    /**
+     * 骑手上传送达凭证
+     * @param deliveryProofDTO
+     */
+    @Override
+    public void deliveryProof(DeliveryProofDTO deliveryProofDTO) {
+        //判断订单 存在 派送中 骑手id是否一致
+        Orders orders = orderMapper.getById(deliveryProofDTO.getOrderId());
+        if (orders == null){
+            throw new OrderNotFoundException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        Long riderId=BaseContext.getCurrentId();
+        if (!orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS) || !orders.getRiderId().equals(riderId)){
+            throw new OrderNotFoundException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        orders.setDeliveryProof(deliveryProofDTO.getDeliveryProof());
+        orderMapper.updateOrder(orders);
+    }
 }

@@ -1,5 +1,6 @@
 package com.sky.controller.rider;
 
+import com.sky.dto.DeliveryProofDTO;
 import com.sky.dto.OrderDetailDTO;
 import com.sky.dto.RiderSquareOrderDTO;
 import com.sky.result.PageResult;
@@ -85,6 +86,18 @@ public class OrderController {
     public Result complete(@PathVariable Long orderId){
         log.info("骑手确认送达：{}",orderId);
         orderService.complete(orderId);
+        return Result.success();
+    }
+
+    /**
+     * 骑手上传订单配送凭证
+     * @param deliveryProofDTO
+     * @return
+     */
+    @PostMapping("/rider/deliveryProof")
+    public Result deliveryProof(@RequestBody DeliveryProofDTO deliveryProofDTO){
+        log.info("骑手上传订单配送凭证：{}",deliveryProofDTO);
+        orderService.deliveryProof(deliveryProofDTO);
         return Result.success();
     }
 }

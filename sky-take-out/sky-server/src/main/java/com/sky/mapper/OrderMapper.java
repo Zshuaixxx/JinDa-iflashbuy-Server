@@ -120,4 +120,10 @@ public interface OrderMapper {
      * @return
      */
     List<OrdersAndLocation> getGoingOrder(Long riderId);
+
+    /**
+     * 更新订单信息
+     * @param orders 订单实体类
+     */
+    void updateOrder(Orders orders);
 }

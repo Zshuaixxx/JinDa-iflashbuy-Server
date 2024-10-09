@@ -135,4 +135,10 @@ public interface OrderService {
      * @return
      */
     List<RiderSquareOrderVO> riderGoingOrder(RiderSquareOrderDTO riderSquareOrderDTO);
+
+    /**
+     * 骑手上传送达凭证
+     * @param deliveryProofDTO
+     */
+    void deliveryProof(DeliveryProofDTO deliveryProofDTO);
 }
