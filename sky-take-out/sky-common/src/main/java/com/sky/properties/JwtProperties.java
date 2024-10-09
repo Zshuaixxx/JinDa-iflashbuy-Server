@@ -27,7 +27,7 @@ public class JwtProperties {
     private String userTokenName;
 
     /**
-     * 用户端微信用户生成jwt令牌相关配置
+     * 骑手端生成jwt令牌相关配置
      */
     private String riderSecretKey;
     private long riderTtl;

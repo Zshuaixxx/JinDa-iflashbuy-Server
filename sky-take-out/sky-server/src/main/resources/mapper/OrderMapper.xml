@@ -82,4 +82,34 @@
         where orders.rider_id=#{riderId} and orders.status=4
     </select>
 
+    <update id="updateOrder">
+        update orders
+        <set>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="deliveryStatus != null">
+                delivery_status=#{deliveryStatus},
+            </if>
+            <if test="deliveryProof != null">
+                delivery_proof=#{deliveryProof},
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time=#{deliveryTime},
+            </if>
+            <if test="payStatus != null">
+                pay_status=#{payStatus},
+            </if>
+            <if test="payMethod != null">
+                pay_method=#{payMethod},
+            </if>
+            <if test="remark != null and remark !='' ">
+                remark=#{remark},
+            </if>
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
 </mapper>
