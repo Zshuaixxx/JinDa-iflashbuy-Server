@@ -74,4 +74,12 @@
         update orders set pay_status=2,pay_method=#{payMethod},checkout_time=#{now},status=2 where number=#{orderNumber}
     </update>
 
+    <select id="getGoingOrder" resultType="com.sky.temp.OrdersAndLocation">
+        select orders.*, address_book.location,address_book.adcode
+        from orders
+        left join address_book
+        on address_book.id = orders.address_book_id
+        where orders.rider_id=#{riderId} and orders.status=4
+    </select>
+
 </mapper>

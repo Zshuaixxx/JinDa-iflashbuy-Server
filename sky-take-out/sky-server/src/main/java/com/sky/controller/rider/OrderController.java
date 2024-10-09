@@ -6,9 +6,12 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderDetailVO;
+import com.sky.vo.RiderSquareOrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author 帅的被人砍
@@ -61,5 +64,15 @@ public class OrderController {
         return Result.success();
     }
 
-
+    /**
+     * 骑手查看配送中的订单
+     * @param riderSquareOrderDTO
+     * @return
+     */
+    @PostMapping("/rider/goingOrder")
+    public Result<List<RiderSquareOrderVO>> riderGoingOrder(@RequestBody RiderSquareOrderDTO riderSquareOrderDTO){
+        log.info("骑手查看配送中的订单：{}",riderSquareOrderDTO);
+        List<RiderSquareOrderVO> goingOrder = orderService.riderGoingOrder(riderSquareOrderDTO);
+        return Result.success(goingOrder);
+    }
 }

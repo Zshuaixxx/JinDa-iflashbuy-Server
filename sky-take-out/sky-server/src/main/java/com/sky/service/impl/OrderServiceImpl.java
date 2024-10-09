@@ -16,7 +16,6 @@ import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShopCartMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.temp.OrdersAndLocation;
 import com.sky.utils.QQmapUtil;
@@ -29,11 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -460,6 +457,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    /**
+     * 骑手查看订单详情
+     * @param orderDetailDTO
+     * @return
+     */
     @Override
     public OrderDetailVO viewOrderDetail(OrderDetailDTO orderDetailDTO) {
         OrdersAndLocation ordersAndLocation = orderMapper.getOrderLocationById(orderDetailDTO.getOrderId());
@@ -479,5 +481,40 @@ public class OrderServiceImpl implements OrderService {
         }else{
             throw new OrderNotFoundException(MessageConstant.ORDER_NOT_FOUND);
         }
+    }
+
+    /**
+     * 骑手查看配送中的订单
+     * @param riderSquareOrderDTO
+     * @return
+     */
+    @Override
+    public List<RiderSquareOrderVO> riderGoingOrder(RiderSquareOrderDTO riderSquareOrderDTO) {
+        Long riderId=BaseContext.getCurrentId();
+        //查询骑手正在配送中的订单
+        List<OrdersAndLocation> ordersAndLocations = orderMapper.getGoingOrder(riderId);
+        //计算距离
+        String from = riderSquareOrderDTO.getLatitude()+","+riderSquareOrderDTO.getLongitude();
+        List<String > allTO=new ArrayList<>();
+        for (OrdersAndLocation ordersAndLocation:ordersAndLocations){
+            allTO.add(ordersAndLocation.getLocation());
+        }
+        String to=StringUtils.join(allTO,';');
+        String mode="bicycling";
+        List<List<Double>> distanceAndDuration = qqmapUtil.getDistance(from, to, mode);
+        //返回订单列表
+        List<RiderSquareOrderVO> ans=new ArrayList<>();
+        //算力不足
+        if (distanceAndDuration.isEmpty()){
+            distanceAndDuration.add(Arrays.asList(0.0,0.0));
+            for (int i=0;i<ordersAndLocations.size();i++){
+                ans.add(new RiderSquareOrderVO(ordersAndLocations.get(i),distanceAndDuration.get(0)));
+            }
+        }else{
+            for (int i=0;i<ordersAndLocations.size();i++){
+                ans.add(new RiderSquareOrderVO(ordersAndLocations.get(i),distanceAndDuration.get(i)));
+            }
+        }
+        return ans;
     }
 }

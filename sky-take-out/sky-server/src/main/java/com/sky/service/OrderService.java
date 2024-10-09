@@ -5,6 +5,7 @@ import com.sky.result.PageResult;
 import com.sky.vo.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * @author 帅的被人砍
@@ -127,4 +128,11 @@ public interface OrderService {
      * @return
      */
     OrderDetailVO viewOrderDetail(OrderDetailDTO orderDetailDTO);
+
+    /**
+     * 骑手查看配送中的订单
+     * @param riderSquareOrderDTO
+     * @return
+     */
+    List<RiderSquareOrderVO> riderGoingOrder(RiderSquareOrderDTO riderSquareOrderDTO);
 }

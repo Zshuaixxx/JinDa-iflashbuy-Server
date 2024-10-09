@@ -113,4 +113,11 @@ public interface OrderMapper {
      * @param now
      */
     void payOrder(String orderNumber, Integer payMethod, LocalDateTime now);
+
+    /**
+     * 根据骑手id查询正在配送中的订单
+     * @param riderId
+     * @return
+     */
+    List<OrdersAndLocation> getGoingOrder(Long riderId);
 }
