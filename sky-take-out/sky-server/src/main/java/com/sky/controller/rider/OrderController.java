@@ -75,4 +75,16 @@ public class OrderController {
         List<RiderSquareOrderVO> goingOrder = orderService.riderGoingOrder(riderSquareOrderDTO);
         return Result.success(goingOrder);
     }
+
+    /**
+     * 骑手确认送达
+     * @param orderId
+     * @return
+     */
+    @PostMapping("/rider/complete/{orderId}")
+    public Result complete(@PathVariable Long orderId){
+        log.info("骑手确认送达：{}",orderId);
+        orderService.complete(orderId);
+        return Result.success();
+    }
 }
