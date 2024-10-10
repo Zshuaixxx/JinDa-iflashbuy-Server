@@ -11,12 +11,11 @@ import com.sky.dto.RiderWeixinLoginDTO;
 import com.sky.result.Result;
 import com.sky.service.RiderService;
 import com.sky.vo.RiderLoginVO;
+import com.sky.vo.RiderProfileVO;
 import com.sky.vo.RiderRegisterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 骑手相关接口
@@ -62,4 +61,14 @@ public class RiderController {
         return Result.success(riderService.riderRegister(riderRegisterDTO));
     }
 
+    /**
+     * 骑手简要信息查询接口
+     * @param riderId
+     * @return
+     */
+    @GetMapping("/rider/riderProfile/{riderId}")
+    public Result<RiderProfileVO> userProfile(@PathVariable Long riderId){
+        RiderProfileVO riderProfileVO=riderService.riderProfile(riderId);
+        return Result.success(riderProfileVO);
+    }
 }

@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -126,4 +127,11 @@ public interface OrderMapper {
      * @param orders 订单实体类
      */
     void updateOrder(Orders orders);
+
+    /**
+     * 统计骑手时间段内的收益
+     * @param map
+     * @return
+     */
+    BigDecimal sumRiderTodayIncome(Map map);
 }

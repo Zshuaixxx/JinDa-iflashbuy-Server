@@ -6,4 +6,8 @@
         insert into rider (phone, password, openid, register_time, sex, avatar, name)
         values (#{phone}, #{password}, #{openid}, #{registerTime}, #{sex}, #{avatar}, #{name})
     </insert>
+
+    <select id="selectById" resultType="com.sky.entity.Rider">
+        select * from rider where id = #{id}
+    </select>
 </mapper>

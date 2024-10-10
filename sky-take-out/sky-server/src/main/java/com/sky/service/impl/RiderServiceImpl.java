@@ -8,10 +8,12 @@ import com.sky.constant.PasswordConstant;
 import com.sky.dto.RiderPasswordLoginDTO;
 import com.sky.dto.RiderRegisterDTO;
 import com.sky.dto.RiderWeixinLoginDTO;
+import com.sky.entity.Orders;
 import com.sky.entity.Rider;
 import com.sky.exception.AccountAlreadyExitException;
 import com.sky.exception.AccountNotExit;
 import com.sky.exception.PasswordErrorException;
+import com.sky.mapper.OrderMapper;
 import com.sky.mapper.RiderMapper;
 import com.sky.properties.JwtProperties;
 import com.sky.properties.WeChatProperties;
@@ -19,13 +21,18 @@ import com.sky.service.RiderService;
 import com.sky.utils.HttpClientUtil;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.RiderLoginVO;
+import com.sky.vo.RiderProfileVO;
 import com.sky.vo.RiderRegisterVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,11 +40,14 @@ import java.util.Map;
  * @author 帅的被人砍
  * @create 2024-09-20 14:10
  */
+@Slf4j
 @Service
 public class RiderServiceImpl implements RiderService {
 
     @Autowired
     private RiderMapper riderMapper;
+    @Autowired
+    private OrderMapper orderMapper;
     @Autowired
     private JwtProperties jwtProperties;
     @Autowired
@@ -146,5 +156,39 @@ public class RiderServiceImpl implements RiderService {
         JSONObject jsonObject = JSON.parseObject(json);
         String openid = jsonObject.getString("openid");
         return openid;
+    }
+
+    /**
+     * 骑手简要信息查询
+     * @param riderId
+     * @return
+     */
+    @Override
+    public RiderProfileVO riderProfile(Long riderId) {
+        Rider rider=riderMapper.selectById(riderId);
+        RiderProfileVO riderProfileVO =new RiderProfileVO();
+        BeanUtils.copyProperties(rider,riderProfileVO);
+        //查询骑手今日收益和月收益
+        LocalDate now = LocalDate.now();
+        LocalDateTime begin = now.atStartOfDay();
+        LocalDateTime end = now.plusDays(1).atStartOfDay();
+        Map dayMap = new HashMap();
+        dayMap.put("begin",begin);
+        dayMap.put("end",end);
+        dayMap.put("riderId",riderId);
+        BigDecimal todayIncome = orderMapper.sumRiderTodayIncome(dayMap);
+        todayIncome = todayIncome == null ? new BigDecimal(0) : todayIncome;
+
+        YearMonth currentMonth = YearMonth.now();
+        LocalDate beginOfMonth = currentMonth.atDay(1);
+        LocalDate endOfMonth = currentMonth.plusMonths(1).atDay(1).minusDays(1);
+        Map<String, Object> monthMap = new HashMap<>();
+        monthMap.put("begin", beginOfMonth);
+        monthMap.put("end", endOfMonth);
+        monthMap.put("riderId", riderId);
+        BigDecimal monthIncome = orderMapper.sumRiderTodayIncome(monthMap);
+        riderProfileVO.setTodayIncome(todayIncome);
+        riderProfileVO.setMonthIncome(monthIncome);
+        return riderProfileVO;
     }
 }

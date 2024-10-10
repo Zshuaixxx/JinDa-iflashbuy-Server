@@ -112,4 +112,11 @@
         </where>
     </update>
 
+    <select id="sumRiderTodayIncome" resultType="java.math.BigDecimal">
+        select sum(amount)
+        from orders
+        where rider_id=#{riderId} and order_time &gt; #{begin} and order_time &lt; #{end} and status=5
+    </select>
+
+
 </mapper>

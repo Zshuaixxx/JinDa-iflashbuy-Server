@@ -38,4 +38,11 @@ public interface RiderMapper  {
      * @param rider
      */
     void insert(Rider rider);
+
+    /**
+     * 根据id查询骑手
+     * @param riderId
+     * @return
+     */
+    Rider selectById(Long riderId);
 }

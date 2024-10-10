@@ -4,6 +4,7 @@ import com.sky.dto.RiderPasswordLoginDTO;
 import com.sky.dto.RiderRegisterDTO;
 import com.sky.dto.RiderWeixinLoginDTO;
 import com.sky.vo.RiderLoginVO;
+import com.sky.vo.RiderProfileVO;
 import com.sky.vo.RiderRegisterVO;
 
 /**
@@ -31,4 +32,11 @@ public interface RiderService {
      * @return
      */
     RiderRegisterVO riderRegister(RiderRegisterDTO riderRegisterDTO);
+
+    /**
+     * 骑手简要信息查询
+     * @param riderId
+     * @return
+     */
+    RiderProfileVO riderProfile(Long riderId);
 }
