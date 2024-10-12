@@ -3,6 +3,8 @@ package com.sky.service;
 import com.sky.dto.RiderPasswordLoginDTO;
 import com.sky.dto.RiderRegisterDTO;
 import com.sky.dto.RiderWeixinLoginDTO;
+import com.sky.entity.Orders;
+import com.sky.entity.Rider;
 import com.sky.vo.RiderLoginVO;
 import com.sky.vo.RiderProfileVO;
 import com.sky.vo.RiderRegisterVO;
@@ -39,4 +41,11 @@ public interface RiderService {
      * @return
      */
     RiderProfileVO riderProfile(Long riderId);
+
+    /**
+     * 骑手详细信息查询
+     * @param riderId
+     * @return
+     */
+    Rider riderDetail(Long riderId);
 }

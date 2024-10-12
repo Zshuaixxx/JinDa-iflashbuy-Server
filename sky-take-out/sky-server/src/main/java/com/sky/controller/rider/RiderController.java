@@ -8,6 +8,8 @@ package com.sky.controller.rider;
 import com.sky.dto.RiderPasswordLoginDTO;
 import com.sky.dto.RiderRegisterDTO;
 import com.sky.dto.RiderWeixinLoginDTO;
+import com.sky.entity.Orders;
+import com.sky.entity.Rider;
 import com.sky.result.Result;
 import com.sky.service.RiderService;
 import com.sky.vo.RiderLoginVO;
@@ -70,5 +72,16 @@ public class RiderController {
     public Result<RiderProfileVO> userProfile(@PathVariable Long riderId){
         RiderProfileVO riderProfileVO=riderService.riderProfile(riderId);
         return Result.success(riderProfileVO);
+    }
+
+    /**
+     * 骑手详细信息查询接口
+     * @param riderId 骑手id
+     * @return Rider
+     */
+    @GetMapping("/rider/detail/{riderId}")
+    public Result<Rider> riderDetail(@PathVariable Long riderId){
+        Rider rider=riderService.riderDetail(riderId);
+        return Result.success(rider);
     }
 }

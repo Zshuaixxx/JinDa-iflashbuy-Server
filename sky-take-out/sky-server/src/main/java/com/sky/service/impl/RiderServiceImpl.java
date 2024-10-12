@@ -191,4 +191,17 @@ public class RiderServiceImpl implements RiderService {
         riderProfileVO.setMonthIncome(monthIncome);
         return riderProfileVO;
     }
+
+    /**
+     * 骑手详情信息查询
+     * @param riderId
+     * @return
+     */
+    @Override
+    public Rider riderDetail(Long riderId) {
+        Rider rider = riderMapper.selectById(riderId);
+        rider.setPassword("******");
+        rider.setOpenid("******");
+        return rider;
+    }
 }
