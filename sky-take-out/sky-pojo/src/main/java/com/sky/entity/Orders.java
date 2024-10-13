@@ -111,4 +111,6 @@ public class Orders implements Serializable {
     private Long riderId;
     //送达凭证
     private String deliveryProof;
+    /** 乐观锁版本号 */
+    private Integer version;
 }

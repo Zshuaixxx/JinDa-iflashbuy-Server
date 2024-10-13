@@ -61,7 +61,7 @@
     </select>
 
     <update id="riderTakeOrder">
-        update orders set status=#{status},rider_id=#{riderId} where id=#{orderId}
+        update orders set status=#{status},rider_id=#{riderId},version=#{version}+1 where id=#{orderId} and version=#{version}
     </update>
 
     <select id="getOrderLocationById" resultType="com.sky.temp.OrdersAndLocation">

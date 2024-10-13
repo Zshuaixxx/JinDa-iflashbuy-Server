@@ -260,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
                 .id(ordersConfirmDTO.getId())
                 .status(Orders.CONFIRMED)
                 .build();
-
+        orderMapper.setVersion(orders.getId(),0);
         orderMapper.updateOrderStatusById(orders.getId(),Orders.CONFIRMED);
     }
 
@@ -446,14 +446,16 @@ public class OrderServiceImpl implements OrderService {
      * @param orderId
      */
     @Override
-    public synchronized void riderTakeOrder(Long orderId) {
+    public  void riderTakeOrder(Long orderId) {
         Orders orders = orderMapper.getById(orderId);
         //判断订单状态是否为待接单
         if(!orders.getStatus().equals(Orders.CONFIRMED)){
             throw new OrderBeenTaken(MessageConstant.Order_Been_Taken);
         }
         Long riderId=BaseContext.getCurrentId();
-        orderMapper.riderTakeOrder(orderId,riderId,Orders.DELIVERY_IN_PROGRESS);
+        synchronized (this){
+            orderMapper.riderTakeOrder(orderId,riderId,Orders.DELIVERY_IN_PROGRESS,orders.getVersion());
+        }
     }
 
 

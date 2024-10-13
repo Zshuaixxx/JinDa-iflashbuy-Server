@@ -98,7 +98,7 @@ public interface OrderMapper {
      * @param riderId
      * @param status
      */
-    void riderTakeOrder(Long orderId, Long riderId, Integer status);
+    void riderTakeOrder(Long orderId, Long riderId, Integer status, Integer version);
 
     /**
      * 根据订单id查询订单经纬度
@@ -134,4 +134,12 @@ public interface OrderMapper {
      * @return
      */
     BigDecimal sumRiderTodayIncome(Map map);
+
+    /**
+     * 商家接单时设置乐观锁版本号
+     * @param id
+     * @param i
+     */
+    @Update("update orders set version=#{i} where id=#{id} ")
+    void setVersion(Long id, int i);
 }
