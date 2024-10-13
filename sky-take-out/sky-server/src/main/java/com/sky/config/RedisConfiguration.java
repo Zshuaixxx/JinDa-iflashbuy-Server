@@ -11,6 +11,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @author 帅的被人砍
  * @create 2024-09-06 12:15
  */
+
+/**
+ * Redis配置类
+ */
 @Configuration
 @Slf4j
 public class RedisConfiguration {
