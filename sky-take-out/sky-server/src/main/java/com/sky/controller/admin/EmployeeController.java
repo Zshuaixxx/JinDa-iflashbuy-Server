@@ -14,11 +14,13 @@ import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 员工管理
@@ -29,9 +31,11 @@ import java.util.Map;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeService employeeService;
-    @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private EmployeeService employeeService;
 
     /**
      * 管理端登录
@@ -52,6 +56,14 @@ public class EmployeeController {
                 jwtProperties.getAdminSecretKey(),
                 jwtProperties.getAdminTtl(),
                 claims);
+
+        //将token储存到redis中并设置过期时间
+        redisTemplate.opsForValue().set(
+                JwtClaimsConstant.LOGIN_ADMIN_ID + employee.getId(),
+                token,
+                jwtProperties.getAdminTtl()/1000,
+                TimeUnit.SECONDS
+        );
 
         EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()
                 .id(employee.getId())

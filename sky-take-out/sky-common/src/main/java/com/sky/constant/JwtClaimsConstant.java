@@ -12,4 +12,5 @@ public class JwtClaimsConstant {
     public static final String USERNAME = "username";
     public static final String NAME = "name";
 
+    public static final String LOGIN_ADMIN_ID="login_admin_id";
 }

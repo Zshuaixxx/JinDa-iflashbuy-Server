@@ -53,7 +53,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .addPathPatterns("/rider/**")
                 .excludePathPatterns("/rider/login/**")
                 .excludePathPatterns("/rider/aboutUs")
-                .excludePathPatterns("/rider.register");
+                .excludePathPatterns("/rider/register");
     }
 
     /**
