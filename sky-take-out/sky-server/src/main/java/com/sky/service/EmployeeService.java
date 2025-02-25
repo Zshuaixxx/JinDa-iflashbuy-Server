@@ -11,9 +11,11 @@ public interface EmployeeService {
     /**
      * 员工登录
      * @param employeeLoginDTO
+     * @param ip
+     * @param userAgent
      * @return
      */
-    Employee login(EmployeeLoginDTO employeeLoginDTO);
+    Employee login(EmployeeLoginDTO employeeLoginDTO,String ip,String userAgent);
 
     /**
      * 新增员工

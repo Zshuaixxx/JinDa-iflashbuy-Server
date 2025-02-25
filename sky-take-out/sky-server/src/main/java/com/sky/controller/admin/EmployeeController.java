@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,10 +45,14 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
-    public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
+    public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO, HttpServletRequest request) {
         log.info("员工登录：{}", employeeLoginDTO);
 
-        Employee employee = employeeService.login(employeeLoginDTO);
+        // 获取http请求中可获取的AdminLoginLog信息
+        String userAgent = request.getHeader("User-Agent");
+        String loginIp = getClientIp(request);
+
+        Employee employee = employeeService.login(employeeLoginDTO,loginIp,userAgent);
 
         //登录成功后，生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
@@ -73,6 +78,20 @@ public class EmployeeController {
                 .build();
 
         return Result.success(employeeLoginVO);
+    }
+
+    /**
+     * 获取当前登录http请求中登录用户的ip地址
+     * @param request http请求
+     * @return ip
+     */
+    private String getClientIp(HttpServletRequest request) {
+        String xffHeader = request.getHeader("X-Forwarded-For");
+        if (xffHeader == null) {
+            return request.getRemoteAddr();
+        }
+        // 如果有多个 IP 地址，第一个 IP 是客户端的真实 IP
+        return xffHeader.split(",")[0].trim();
     }
 
     /**
