@@ -1,5 +1,6 @@
 package com.sky.config;
 
+import com.sky.interceptor.AdminLoginInterceptor;
 import com.sky.interceptor.JwtTokenAdminInterceptor;
 import com.sky.interceptor.JwtTokenRiderInterceptor;
 import com.sky.interceptor.JwtTokenUserInterceptor;
@@ -35,6 +36,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     private JwtTokenUserInterceptor jwtTokenUserInterceptor;
     @Autowired
     private JwtTokenRiderInterceptor jwtTokenRiderInterceptor;
+    @Autowired
+    private AdminLoginInterceptor adminLoginInterceptor;
     /**
      * 注册自定义拦截器
      *
@@ -54,6 +57,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/rider/login/**")
                 .excludePathPatterns("/rider/aboutUs")
                 .excludePathPatterns("/rider/register");
+//        registry.addInterceptor(adminLoginInterceptor)
+//                .addPathPatterns("/admin/employee/login");
     }
 
     /**

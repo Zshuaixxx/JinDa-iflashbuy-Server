@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.annotation.Log;
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.constant.MessageConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -38,6 +39,8 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    private static final int MAX_REQUEST_COUNT = 5; // 最大请求次数
+    private static final long TIME_WINDOW = 60; // 时间窗口（秒）
     /**
      * 管理端登录
      *
@@ -47,6 +50,26 @@ public class EmployeeController {
     @PostMapping("/login")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO, HttpServletRequest request) {
         log.info("员工登录：{}", employeeLoginDTO);
+
+        if (employeeLoginDTO.getUsername() != null) {
+            String key = "admin_login_request:" + employeeLoginDTO.getUsername();
+            // 指定 RedisTemplate 的泛型类型
+            RedisTemplate<String, Integer> typedRedisTemplate = redisTemplate;
+            Integer count = typedRedisTemplate.opsForValue().get(key);
+            log.info("拦截管理端登录：{},{}", employeeLoginDTO.getUsername(), count);
+            if (count == null) {
+                // 首次请求，设置请求次数为 1，并设置过期时间
+                typedRedisTemplate.opsForValue().set(key, 1, TIME_WINDOW, TimeUnit.SECONDS);
+            } else if (count < MAX_REQUEST_COUNT) {
+                // 未超过最大请求次数，增加请求次数
+                typedRedisTemplate.opsForValue().increment(key);
+            } else {
+                // 超过最大请求次数，返回错误信息
+                return Result.error(MessageConstant.TOO_MANY_REQUESTS);
+            }
+        }else{
+            return Result.error(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
 
         // 获取http请求中可获取的AdminLoginLog信息
         String userAgent = request.getHeader("User-Agent");
