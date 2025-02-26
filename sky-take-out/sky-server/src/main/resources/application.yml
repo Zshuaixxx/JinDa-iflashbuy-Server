@@ -61,3 +61,17 @@ sky:
   qqmap:
     key: ${sky.qqmap.key}
 
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+springfox:
+  documentation:
+    enabled: false
