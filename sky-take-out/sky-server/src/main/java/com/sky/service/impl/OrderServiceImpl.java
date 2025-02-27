@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.config.RabbitMQConfig;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.*;
@@ -23,6 +24,7 @@ import com.sky.vo.*;
 import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +57,8 @@ public class OrderServiceImpl implements OrderService {
     private WebSocketServer webSocketServer;
     @Autowired
     private QQmapUtil qqmapUtil;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     /**
      * 用户提交订单
@@ -104,6 +109,18 @@ public class OrderServiceImpl implements OrderService {
 
         //删除用户的购物车数据
         shopCartMapper.cleanShopCartByUserId(id);
+
+        // 计算订单超时时间（假设 15 分钟） 1分钟仅仅作为测试
+        long timeout = TimeUnit.MINUTES.toMillis(1);
+
+        // 发送订单超时消息到消息队列
+        rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_TIMEOUT_EXCHANGE,
+                RabbitMQConfig.ORDER_TIMEOUT_ROUTING_KEY,
+                orders.getId(),
+                message -> {
+                    message.getMessageProperties().setExpiration(String.valueOf(timeout));
+                    return message;
+                });
 
         //5.封装V0返回结果
         OrderSubmitVO orderSubmitVO=OrderSubmitVO.builder()

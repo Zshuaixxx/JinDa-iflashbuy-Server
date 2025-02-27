@@ -25,7 +25,7 @@ public class OrderTask {
     /**
      * 处理订单超市
      */
-    @Scheduled(cron = "0 * * * * ? ")
+    /*@Scheduled(cron = "0 * * * * ? ")
 //    @Scheduled(cron = "0/5 * * * * ?")
     public void orderPayOutTimeTask(){
         log.info("处理支付超时订单{}", LocalDateTime.now());
@@ -42,12 +42,12 @@ public class OrderTask {
                 orderMapper.updateOrderStatusById(orders.getId(),Orders.CANCELLED);
             }
         }
-    }
+    }*/
 
     /**
      * 处理派送未点松达订单
      */
-    @Scheduled(cron = "0 0 1 * * ?")
+    /*@Scheduled(cron = "0 0 1 * * ?")
 //    @Scheduled(cron = "0/5 * * * * ?")
     public void orderDeliveryTimeOutTask(){
         log.info("处理派送未点松达订单{}",LocalDateTime.now());
@@ -60,5 +60,5 @@ public class OrderTask {
                 orderMapper.updateOrderStatusById(orders.getId(),Orders.COMPLETED);
             }
         }
-    }
+    }*/
 }

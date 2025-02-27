@@ -5,6 +5,8 @@ package com.sky.controller.user;
  * @create 2024-09-06 17:26
  */
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.Category;
@@ -28,6 +30,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +54,8 @@ public class UserController {
     private SetmealDishService setmealDishService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * 用户端登录
@@ -100,14 +105,26 @@ public class UserController {
         String key = "dish_"+categoryId;
 
         //查询redis中是否存在菜品数据
-        DishVO[] list= (DishVO[]) redisTemplate.opsForValue().get(key);
+        DishVO[] list = new DishVO[0];
+        Object obj = redisTemplate.opsForValue().get(key);
+        if (obj instanceof ArrayList) {
+            List<DishVO> dishVOList = objectMapper.convertValue(obj, new TypeReference<List<DishVO>>() {});
+            log.error(dishVOList.get(0).toString());
+            list = dishVOList.toArray(new DishVO[0]);
+        }
         if(list != null && list.length> 0) {
             //如果存在，直接返回，无须查询数据库
             return Result.success(list);
         }
 
         DishVO[] dishVOS=userService.getDishAndFlavorsByCategoryId(categoryId);
-        redisTemplate.opsForValue().set(key, dishVOS);
+        try {
+            redisTemplate.opsForValue().set(key, dishVOS);
+        } catch (Exception e) {
+            log.error("存储 DishVO 数组到 Redis 时出错", e);
+            // 打印详细的异常堆栈信息
+            e.printStackTrace();
+        }
         return Result.success(dishVOS);
     }
 
