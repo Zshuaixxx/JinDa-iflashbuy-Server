@@ -21,6 +21,7 @@ import com.sky.service.SetmealDishService;
 import com.sky.service.SetmealService;
 import com.sky.service.UserService;
 import com.sky.utils.JwtUtil;
+import com.sky.utils.RedisLockUtil;
 import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import com.sky.vo.UserLoginVO;
@@ -30,10 +31,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户相关接口
@@ -55,7 +53,11 @@ public class UserController {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
+    private RedisTemplate<String, String> stringRedisTemplate;
+    @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private RedisLockUtil redisLockUtil;
 
     /**
      * 用户端登录
@@ -104,7 +106,7 @@ public class UserController {
         //构造redis中的key，规则：dish_分类id
         String key = "dish_"+categoryId;
 
-        //查询redis中是否存在菜品数据
+        //1.查询redis中是否存在菜品数据
         DishVO[] list = new DishVO[0];
         Object obj = redisTemplate.opsForValue().get(key);
         if (obj instanceof ArrayList) {
@@ -117,15 +119,45 @@ public class UserController {
             return Result.success(list);
         }
 
-        DishVO[] dishVOS=userService.getDishAndFlavorsByCategoryId(categoryId);
-        try {
-            redisTemplate.opsForValue().set(key, dishVOS);
-        } catch (Exception e) {
-            log.error("存储 DishVO 数组到 Redis 时出错", e);
-            // 打印详细的异常堆栈信息
-            e.printStackTrace();
+        //2.如果不存在，查询数据库
+        String lockKey = "lock_dish_" + categoryId;
+        String lockValue = UUID.randomUUID().toString();
+        boolean isLocked = redisLockUtil.getLock(stringRedisTemplate, lockKey, lockValue, 1); // 锁的过期时间设置为 10 秒
+        if (isLocked) {
+            try {
+                // 再次检查 Redis 中是否存在菜品数据
+                obj = redisTemplate.opsForValue().get(key);
+                if (obj != null) {
+                    try {
+                        List<DishVO> dishVOList = objectMapper.convertValue(obj, new TypeReference<List<DishVO>>() {});
+                        list = dishVOList.toArray(new DishVO[0]);
+                    } catch (Exception e) {
+                        log.error("从 Redis 中转换 DishVO 列表时出错", e);
+                    }
+                }
+                if (list.length == 0) {
+                    // 查询数据库
+                    list = userService.getDishAndFlavorsByCategoryId(categoryId);
+                    if (list.length > 0) {
+                        try {
+                            redisTemplate.opsForValue().set(key, list);
+                        } catch (Exception e) {
+                            log.error("存储 DishVO 列表到 Redis 时出错", e);
+                        }
+                    }
+                }
+            }finally {
+                redisLockUtil.releaseLock(stringRedisTemplate, lockKey, lockValue);
+            }
+        }else{
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                log.error("线程等待时出错", e);
+            }
+            return getDishAndFlavorsByCategoryId(categoryId);
         }
-        return Result.success(dishVOS);
+        return Result.success(list);
     }
 
     /**

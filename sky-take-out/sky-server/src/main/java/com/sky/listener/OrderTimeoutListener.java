@@ -25,6 +25,10 @@ public class OrderTimeoutListener {
     @Autowired
     private OrderMapper orderMapper;
 
+    /**
+     * 监听订单是否超时未支付
+     * @param orderId
+     */
     @RabbitListener(queues = RabbitMQConfig.DEAD_LETTER_QUEUE)
     public void handleOrderTimeout(Long orderId) {
         // 查询订单信息
