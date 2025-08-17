@@ -38,6 +38,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     private JwtTokenRiderInterceptor jwtTokenRiderInterceptor;
     @Autowired
     private AdminLoginInterceptor adminLoginInterceptor;
+
     /**
      * 注册自定义拦截器
      *
@@ -63,15 +64,16 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 通过knife4j生成接口文档
+     *
      * @return
      */
     @Bean
     public Docket docket() {
         log.info("准备生成接口文档");
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("苍穹外卖项目接口文档")
+                .title("尽达闪购项目接口文档")
                 .version("2.0")
-                .description("苍穹外卖项目接口文档")
+                .description("尽达闪购项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
@@ -84,11 +86,17 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 设置静态资源映射
+     *
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Knife4j/Swagger UI相关资源映射
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        // 添加Swagger资源映射
+        registry.addResourceHandler("/swagger-resources/**").addResourceLocations("classpath:/META-INF/resources/swagger-resources/");
+        registry.addResourceHandler("/swagger-ui/**").addResourceLocations("classpath:/META-INF/resources/swagger-ui/");
+        registry.addResourceHandler("/v2/api-docs").addResourceLocations("classpath:/META-INF/resources/v2/api-docs/");
     }
 
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -96,6 +104,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         //需要为消息转换器设置一个对象转换器，对象转换器可以将Java对象序列化为json数据
         converter.setObjectMapper(new JacksonObjectMapper());
-        converters.add(0,converter);
+        converters.add(0, converter);
     }
 }

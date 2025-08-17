@@ -1,7 +1,8 @@
 package com.sky.interceptor;
 
 import com.sky.constant.JwtClaimsConstant;
-import com.sky.context.BaseContext;
+import com.sky.context.EmployeeContext;
+import com.sky.context.MerchantContext;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -57,6 +58,14 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             }
             log.info("当前员工id：{}", empId);
 
+            // 获取商家ID并存储到MerchantContext中
+            Long merchantId = null;
+            if (claims.get(JwtClaimsConstant.MERCHANT_ID) != null) {
+                merchantId = Long.valueOf(claims.get(JwtClaimsConstant.MERCHANT_ID).toString());
+                log.info("当前商家id：{}", merchantId);
+                MerchantContext.setCurrentId(merchantId);
+            }
+
             //查询该id在redis中对应的token是否正确
             String redisToken = (String) redisTemplate.opsForValue().get(JwtClaimsConstant.LOGIN_ADMIN_ID+empId);
             if(redisToken == null){
@@ -70,7 +79,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             }else{
                 //正确登录状态
                 // 将当前id存到线程中
-                BaseContext.setCurrentId(empId);
+                EmployeeContext.setCurrentId(empId);
                 //3、通过，放行
                 return true;
             }

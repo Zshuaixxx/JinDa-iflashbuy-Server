@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  output:
+    ansi:
+      enabled: ALWAYS
   profiles:
     active: dev
   main:

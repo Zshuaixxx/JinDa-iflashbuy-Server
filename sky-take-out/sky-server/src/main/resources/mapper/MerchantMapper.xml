@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.mapper.MerchantMapper">
+
+    <!-- 根据状态查询商家列表 -->
+    <select id="getMerchantListByStatus" resultType="com.sky.entity.Merchant">
+        select * from merchant where status = #{status}
+    </select>
+
+    <!-- 根据ID查询商家详情 -->
+    <select id="getMerchantById" resultType="com.sky.entity.Merchant">
+        select * from merchant where id = #{id}
+    </select>
+
+    <!-- 根据商家名称查询商家 -->
+    <select id="getMerchantByName" resultType="com.sky.entity.Merchant">
+        select * from merchant where name = #{name}
+    </select>
+
+    <!-- 更新商家状态 -->
+    <update id="updateMerchantStatus">
+        update merchant set status = #{status}, update_time = now(), update_user = #{updateUser} where id = #{id}
+    </update>
+
+</mapper>

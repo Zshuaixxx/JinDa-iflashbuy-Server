@@ -1,4 +1,4 @@
-package com.sky.controller.admin;
+package com.sky.controller.merchant;
 
 import com.sky.result.Result;
 import com.sky.service.OrderService;

@@ -1,7 +1,7 @@
 package com.sky.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.sky.context.BaseContext;
+import com.sky.context.EmployeeContext;
 import com.sky.entity.OperateLog;
 import com.sky.mapper.OperateLogMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +47,7 @@ public class LogAspect {
         //获取方法返回值
         String methodResult = JSON.toJSONString(result);
         OperateLog operateLog = OperateLog.builder()
-                .employeeId(BaseContext.getCurrentId())
+                .employeeId(EmployeeContext.getCurrentId())
                 .operateTime(LocalDateTime.now())
                 .operateClass(operateClass)
                 .operateMethod(operateMethod)

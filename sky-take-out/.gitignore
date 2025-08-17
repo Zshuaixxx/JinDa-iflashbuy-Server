@@ -3,4 +3,7 @@
 *.iml
 *.class
 *Test.java
+.vscode
 **/test/
+.docs
+.trae

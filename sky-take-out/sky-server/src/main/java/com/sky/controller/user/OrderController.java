@@ -5,7 +5,7 @@ package com.sky.controller.user;
  * @create 2024-09-11 13:22
  */
 
-import com.sky.context.BaseContext;
+import com.sky.context.EmployeeContext;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
@@ -48,7 +48,7 @@ public class OrderController {
     public Result<PageResult> pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO){
         log.info("用户端查询历史订单：{}",ordersPageQueryDTO);
         //用户端查询需加入userid  管理端无需
-        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+        ordersPageQueryDTO.setUserId(EmployeeContext.getCurrentId());
         return Result.success(orderService.pageViewHistoryOrders(ordersPageQueryDTO));
     }
 

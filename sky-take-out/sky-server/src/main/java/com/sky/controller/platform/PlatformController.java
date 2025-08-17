@@ -1,4 +1,4 @@
-package com.sky.controller.admin;
+package com.sky.controller.platform;
 
 /**
  * @author 帅的被人砍

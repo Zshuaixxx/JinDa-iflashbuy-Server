@@ -41,5 +41,7 @@ public class Employee implements Serializable {
     private Long createUser;
 
     private Long updateUser;
+    
+    private Long merchantId;
 
 }

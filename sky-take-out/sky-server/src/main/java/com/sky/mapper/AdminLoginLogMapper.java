@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AdminLoginLogMapper {
-    @Insert("insert into admin_login_log (admin_id,login_time,login_ip,device_info,login_status) " +
+    @Insert("insert into merchant_employee_login_log (employee_id,login_time,login_ip,device_info,login_status) " +
             "values (#{adminId},#{loginTime},#{ip},#{deviceInfo},#{loginStatus})")
     void insertLog(AdminLoginLog adminLoginLog);
 }

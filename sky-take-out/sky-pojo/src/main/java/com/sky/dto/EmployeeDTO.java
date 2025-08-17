@@ -18,5 +18,7 @@ public class EmployeeDTO implements Serializable {
     private String sex;
 
     private String idNumber;
+    
+    private Long merchantId;
 
 }

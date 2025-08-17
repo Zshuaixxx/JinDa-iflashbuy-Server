@@ -1,35 +1,36 @@
-package com.sky.controller.admin;
+package com.sky.controller.merchant;
 
-import com.sky.annotation.Log;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.entity.Merchant;
 import com.sky.properties.JwtProperties;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
+import com.sky.service.AdminLoginLogService;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import com.sky.context.MerchantContext;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 员工管理
- */
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
+@Api(tags = "员工相关接口")
 public class EmployeeController {
 
     @Autowired
@@ -38,6 +39,8 @@ public class EmployeeController {
     private RedisTemplate redisTemplate;
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private com.sky.mapper.MerchantMapper merchantMapper;
 
     private static final int MAX_REQUEST_COUNT = 5; // 最大请求次数
     private static final long TIME_WINDOW = 60; // 时间窗口（秒）
@@ -48,6 +51,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
+    @ApiOperation(value = "员工登录")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO, HttpServletRequest request) {
         log.info("员工登录：{}", employeeLoginDTO);
 
@@ -80,6 +84,7 @@ public class EmployeeController {
         //登录成功后，生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
+        claims.put(JwtClaimsConstant.MERCHANT_ID, employee.getMerchantId());
         String token = JwtUtil.createJWT(
                 jwtProperties.getAdminSecretKey(),
                 jwtProperties.getAdminTtl(),
@@ -93,11 +98,16 @@ public class EmployeeController {
                 TimeUnit.SECONDS
         );
 
+        // 获取商家信息
+        Merchant merchant = merchantMapper.getMerchantById(employee.getMerchantId());
+
         EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()
                 .id(employee.getId())
                 .userName(employee.getUsername())
                 .name(employee.getName())
                 .token(token)
+                .merchantId(employee.getMerchantId())
+                .merchantName(merchant.getName())
                 .build();
 
         return Result.success(employeeLoginVO);
@@ -123,6 +133,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/logout")
+    @ApiOperation(value = "员工退出")
     public Result<String> logout() {
         return Result.success();
     }
@@ -132,10 +143,12 @@ public class EmployeeController {
      * @param employeeDTO
      * @return
      */
-    @Log
     @PostMapping()
-    private Result addEmp(@RequestBody EmployeeDTO employeeDTO){
+    @ApiOperation(value = "新增员工")
+    public Result addEmp(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增员工{}",employeeDTO);
+        // 从MerchantContext中获取商家ID
+        employeeDTO.setMerchantId(MerchantContext.getCurrentId());
         employeeService.addEmp(employeeDTO);
         return Result.success();
     }
@@ -146,8 +159,11 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/page")
+    @ApiOperation(value = "员工分页查询")
     public Result<PageResult> pageViewEmp(EmployeePageQueryDTO employeePageQueryDTO){
         log.info("分页查询员工参数{}",employeePageQueryDTO);
+        // 设置商家ID
+        employeePageQueryDTO.setMerchantId(MerchantContext.getCurrentId());
         PageResult pageResult=employeeService.pageViewEmp(employeePageQueryDTO);
         return Result.success(pageResult);
     }
@@ -158,8 +174,8 @@ public class EmployeeController {
      * @param id
      * @return
      */
-    @Log
     @PostMapping("/status/{status}")
+    @ApiOperation(value = "启用禁用员工账号")
     public Result setEmpStatus(@PathVariable Integer status ,Long id){
         employeeService.setEmpStatus(status,id);
         return Result.success();
@@ -171,6 +187,7 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询员工信息")
     public Result<Employee> getEmpById(@PathVariable Long id){
         log.info("根据id查询员工信息{}",id);
         Employee employee=employeeService.getEmpById(id);
@@ -182,11 +199,12 @@ public class EmployeeController {
      * @param employeeDTO
      * @return
      */
-    @Log
     @PutMapping
+    @ApiOperation(value = "编辑员工信息")
     public Result updateEmpInfo(@RequestBody EmployeeDTO employeeDTO){
         log.info("编辑用户信息{}",employeeDTO);
         employeeService.updateEmpInfo(employeeDTO);
         return Result.success();
     }
+    
 }

@@ -4,17 +4,19 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
+import com.sky.context.MerchantContext;
+import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.result.PageResult;
 import com.sky.constant.StatusConstant;
+import com.sky.context.EmployeeContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
-import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.AdminLoginLog;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
-import com.sky.result.PageResult;
 import com.sky.service.AdminLoginLogService;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
@@ -42,11 +44,12 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return
      */
     public Employee login(EmployeeLoginDTO employeeLoginDTO,String ip,String userAgent) {
+        String merchantName = employeeLoginDTO.getMerchantName();
         String username = employeeLoginDTO.getUsername();
         String password = employeeLoginDTO.getPassword();
 
-        //1、根据用户名查询数据库中的数据
-        Employee employee = employeeMapper.getByUsername(username);
+        //1、根据商家名称和用户名查询数据库中的数据
+        Employee employee = employeeMapper.getByMerchantNameAndUsername(merchantName, username);
 
         AdminLoginLog adminLoginLog = AdminLoginLog.builder()
                 .loginTime(LocalDateTime.now())
@@ -91,19 +94,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void addEmp(EmployeeDTO employeeDTO) {
         Employee employee=new Employee();
-//        对象属性拷贝
+        // 对象属性拷贝
         BeanUtils.copyProperties(employeeDTO,employee);
-//        设置账号状态
+        // 设置账号状态
         employee.setStatus(StatusConstant.ENABLE);
-//        设置密码
+        // 设置密码
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-//        设置创建时间和更新时间
-        LocalDateTime now=LocalDateTime.now();
-//        employee.setCreateTime(now);
-//        employee.setUpdateTime(now);
-//        设置操作人id
-//        employee.setCreateUser(BaseContext.getCurrentId());
-//        employee.setUpdateUser(BaseContext.getCurrentId());
+        // 设置创建时间和更新时间
+        LocalDateTime now = LocalDateTime.now();
+        employee.setCreateTime(now);
+        employee.setUpdateTime(now);
+        // 设置操作人id
+        employee.setCreateUser(EmployeeContext.getCurrentId());
+        employee.setUpdateUser(EmployeeContext.getCurrentId());
+        // 设置商家ID
+        employee.setMerchantId(employeeDTO.getMerchantId());
         employeeMapper.addEmp(employee);
     }
 
@@ -131,11 +136,17 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void setEmpStatus(Integer status, Long id) {
-        Employee employee = Employee.builder()
+        // 验证员工是否属于当前商家
+        Employee employee = employeeMapper.getEmpByIdAndMerchantId(id, MerchantContext.getCurrentId());
+        if (employee == null) {
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+        
+        employee = Employee.builder()
                 .status(status)
                 .id(id)
-//                .updateTime(LocalDateTime.now())
-//                .updateUser(BaseContext.getCurrentId())
+                .updateTime(LocalDateTime.now())
+                .updateUser(EmployeeContext.getCurrentId())
                 .build();
         employeeMapper.updataEmp(employee);
     }
@@ -147,20 +158,17 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void updateEmpInfo(EmployeeDTO employeeDTO) {
-//        Employee employee=Employee.builder()
-//                .id(employeeDTO.getId())
-//                .idNumber(employeeDTO.getIdNumber())
-//                .name(employeeDTO.getName())
-//                .phone(employeeDTO.getPhone())
-//                .sex(employeeDTO.getSex())
-//                .username(employeeDTO.getUsername())
-//                .updateTime(LocalDateTime.now())
-//                .updateUser(BaseContext.getCurrentId())
-//                .build();
-        Employee employee=new Employee();
-        BeanUtils.copyProperties(employeeDTO,employee);
-//        employee.setUpdateTime(LocalDateTime.now());
-//        employee.setUpdateUser(BaseContext.getCurrentId());
+        // 验证员工是否属于当前商家
+        Employee employee = employeeMapper.getEmpByIdAndMerchantId(employeeDTO.getId(), MerchantContext.getCurrentId());
+        if (employee == null) {
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+        
+        employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setMerchantId(employeeDTO.getMerchantId());
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(EmployeeContext.getCurrentId());
         employeeMapper.updataEmp(employee);
     }
 
@@ -171,10 +179,13 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public Employee getEmpById(Long id) {
-        Employee employee=employeeMapper.getEmpById(id);
+        // 验证员工是否属于当前商家
+        Employee employee = employeeMapper.getEmpByIdAndMerchantId(id, MerchantContext.getCurrentId());
+        if (employee == null) {
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+        
         employee.setPassword("******");
         return employee;
     }
-
-
 }

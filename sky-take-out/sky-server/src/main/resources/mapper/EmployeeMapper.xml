@@ -8,6 +8,7 @@
             <if test="name != null and name != ''">
                 name like concat('%',#{name},'%')
             </if>
+            and merchant_id = #{merchantId}
         </where>
         order by create_time desc
     </select>
@@ -24,6 +25,7 @@
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="updateUser != null">update_user = #{updateUser},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="merchantId != null">merchant_id = #{merchantId},</if>
         </set>
         where id=#{id}
     </update>

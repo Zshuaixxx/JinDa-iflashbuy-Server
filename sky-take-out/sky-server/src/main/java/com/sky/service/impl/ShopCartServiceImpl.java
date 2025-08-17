@@ -1,6 +1,6 @@
 package com.sky.service.impl;
 
-import com.sky.context.BaseContext;
+import com.sky.context.EmployeeContext;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
@@ -39,7 +39,7 @@ public class ShopCartServiceImpl implements ShopCartService {
         //先查询此菜品是否存在
         ShoppingCart shoppingCart=new ShoppingCart();
         BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
-        shoppingCart.setUserId(BaseContext.getCurrentId());
+        shoppingCart.setUserId(EmployeeContext.getCurrentId());
 
         List<ShoppingCart> shoppingCarts=shopCartMapper.getShopCartItems(shoppingCart);
         //存在  数量加一
@@ -72,7 +72,7 @@ public class ShopCartServiceImpl implements ShopCartService {
     @Override
     public List<ShoppingCart> viewShoppingCart() {
         ShoppingCart shoppingCart=new ShoppingCart();
-        shoppingCart.setUserId(BaseContext.getCurrentId());
+        shoppingCart.setUserId(EmployeeContext.getCurrentId());
         return shopCartMapper.getShopCartItems(shoppingCart);
     }
 
@@ -81,7 +81,7 @@ public class ShopCartServiceImpl implements ShopCartService {
      */
     @Override
     public void cleanShopCart() {
-        Long userId = BaseContext.getCurrentId();
+        Long userId = EmployeeContext.getCurrentId();
         shopCartMapper.cleanShopCartByUserId(userId);
     }
 
@@ -93,7 +93,7 @@ public class ShopCartServiceImpl implements ShopCartService {
         //先把这个菜品或者套餐查出来
         ShoppingCart shoppingCart=new ShoppingCart();
         BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
-        shoppingCart.setUserId(BaseContext.getCurrentId());
+        shoppingCart.setUserId(EmployeeContext.getCurrentId());
 
         List<ShoppingCart> shoppingCarts=shopCartMapper.getShopCartItems(shoppingCart);
         if(shoppingCarts != null && shoppingCarts.size()>0){

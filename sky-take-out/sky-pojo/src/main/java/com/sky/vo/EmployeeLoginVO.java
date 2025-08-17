@@ -28,4 +28,10 @@ public class EmployeeLoginVO implements Serializable {
     @ApiModelProperty("jwt令牌")
     private String token;
 
+    @ApiModelProperty("商家ID")
+    private Long merchantId;
+
+    @ApiModelProperty("商家名称")
+    private String merchantName;
+
 }

@@ -33,16 +33,16 @@
     </properties>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis.spring}</version>
-            </dependency>
 <!--            <dependency>-->
-<!--                <groupId>com.baomidou</groupId>-->
-<!--                <artifactId>mybatis-plus-boot-starter</artifactId>-->
-<!--                <version>3.5.7</version>-->
+<!--                <groupId>org.mybatis.spring.boot</groupId>-->
+<!--                <artifactId>mybatis-spring-boot-starter</artifactId>-->
+<!--                <version>${mybatis.spring}</version>-->
 <!--            </dependency>-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>3.5.7</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -72,6 +72,13 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>1.4.7</version>
+            </dependency>
+
+            <!-- JSQLParser dependency for PageHelper -->
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>4.6</version>
             </dependency>
 
             <dependency>

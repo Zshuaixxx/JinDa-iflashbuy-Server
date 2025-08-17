@@ -1,7 +1,7 @@
 package com.sky.interceptor;
 
 import com.sky.constant.JwtClaimsConstant;
-import com.sky.context.BaseContext;
+import com.sky.context.EmployeeContext;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -50,7 +50,7 @@ public class JwtTokenRiderInterceptor implements HandlerInterceptor {
             Long riderId = Long.valueOf(claims.get(JwtClaimsConstant.RIDER_ID).toString());
             log.info("当前骑手id：{}", riderId);
 //            将当前id存到线程中
-            BaseContext.setCurrentId(riderId);
+            EmployeeContext.setCurrentId(riderId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {

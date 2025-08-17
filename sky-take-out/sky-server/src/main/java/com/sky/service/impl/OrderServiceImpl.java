@@ -5,7 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.config.RabbitMQConfig;
 import com.sky.constant.MessageConstant;
-import com.sky.context.BaseContext;
+import com.sky.context.EmployeeContext;
 import com.sky.dto.*;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             throw  new AddressBookBusinessException(MessageConstant.ADDRESS_BOOK_IS_NULL);
         }
         //购物车是否为空
-        Long id = BaseContext.getCurrentId();
+        Long id = EmployeeContext.getCurrentId();
         ShoppingCart s = ShoppingCart.builder()
                 .id(id).build();
         List<ShoppingCart> shopCartItems = shopCartMapper.getShopCartItems(s);
@@ -227,7 +227,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void againOrder(Long id) {
         // 查询当前用户id
-        Long userId = BaseContext.getCurrentId();
+        Long userId = EmployeeContext.getCurrentId();
 
         // 根据订单id查询当前订单详情
         List<OrderDetail> orderDetailList = orderDetailMapper.getDetailByOrderId(id);
@@ -469,7 +469,7 @@ public class OrderServiceImpl implements OrderService {
         if(!orders.getStatus().equals(Orders.CONFIRMED)){
             throw new OrderBeenTaken(MessageConstant.Order_Been_Taken);
         }
-        Long riderId=BaseContext.getCurrentId();
+        Long riderId= EmployeeContext.getCurrentId();
         synchronized (this){
             orderMapper.riderTakeOrder(orderId,riderId,Orders.DELIVERY_IN_PROGRESS,orders.getVersion());
         }
@@ -509,7 +509,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public List<RiderSquareOrderVO> riderGoingOrder(RiderSquareOrderDTO riderSquareOrderDTO) {
-        Long riderId=BaseContext.getCurrentId();
+        Long riderId= EmployeeContext.getCurrentId();
         //查询骑手正在配送中的订单
         List<OrdersAndLocation> ordersAndLocations = orderMapper.getGoingOrder(riderId);
         //计算距离
@@ -548,7 +548,7 @@ public class OrderServiceImpl implements OrderService {
         if (orders == null){
             throw new OrderNotFoundException(MessageConstant.ORDER_NOT_FOUND);
         }
-        Long riderId=BaseContext.getCurrentId();
+        Long riderId= EmployeeContext.getCurrentId();
         if (!orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS) || !orders.getRiderId().equals(riderId)){
             throw new OrderNotFoundException(MessageConstant.ORDER_STATUS_ERROR);
         }
