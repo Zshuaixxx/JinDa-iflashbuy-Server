@@ -38,8 +38,8 @@ public interface EmployeeMapper {
      * @return
      */
     @AutoFill(OperationType.INSERT)
-    @Insert("insert into employee(name, username, password, phone, sex, id_number, create_time, update_time, create_user, update_user)" +
-            " VALUES (#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+    @Insert("insert into employee(name, username, password, phone, sex, id_number, merchant_id, create_time, update_time, create_user, update_user)" +
+            " VALUES (#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{merchantId},#{createTime},#{updateTime},#{createUser},#{updateUser})")
     void addEmp(Employee employee);
 
     /**

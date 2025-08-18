@@ -1,7 +1,9 @@
 package com.sky.controller.platform;
 
+import com.sky.constant.MessageConstant;
 import com.sky.dto.MerchantDTO;
 import com.sky.dto.MerchantPageQueryDTO;
+import com.sky.dto.MerchantWithEmployeeDTO;
 import com.sky.entity.Merchant;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
@@ -29,14 +31,14 @@ public class MerchantController {
 
     /**
      * 商家注册
-     * @param merchantDTO 商家注册信息
+     * @param merchantWithEmployeeDTO 商家注册信息和默认员工信息
      * @return 操作结果
      */
     @PostMapping("/register")
-    @ApiOperation("商家注册")
-    public Result register(@RequestBody MerchantDTO merchantDTO) {
-        log.info("商家注册: {}", merchantDTO);
-        merchantService.register(merchantDTO);
+    @ApiOperation("新增商家和默认员工账号")
+    public Result register(@RequestBody MerchantWithEmployeeDTO merchantWithEmployeeDTO) {
+        log.info("新增商家和默认员工账号: {}", merchantWithEmployeeDTO);
+        merchantService.registerWithDefaultEmployee(merchantWithEmployeeDTO);
         return Result.success();
     }
 

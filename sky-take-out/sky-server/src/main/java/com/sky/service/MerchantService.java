@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.MerchantDTO;
 import com.sky.dto.MerchantPageQueryDTO;
+import com.sky.dto.MerchantWithEmployeeDTO;
 import com.sky.entity.Merchant;
 import com.sky.result.PageResult;
 
@@ -44,6 +45,12 @@ public interface MerchantService {
      * @param status 商家状态
      */
     void updateStatus(Long id, Integer status);
+
+    /**
+     * 新增商家和默认员工账号
+     * @param merchantWithEmployeeDTO 商家和默认员工信息
+     */
+    void registerWithDefaultEmployee(MerchantWithEmployeeDTO merchantWithEmployeeDTO);
 
     /**
      * 根据状态查询商家列表
