@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.sky.annotation.AutoFill;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.MerchantContext;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Dish;
@@ -46,10 +47,10 @@ public class SetmealServiceImpl implements SetmealService {
     @Transactional
     @Override
     public void addSetmeal(SetmealDTO setmealDTO) {
-        // 插入套餐表   TO DO 需要返回id
+        // 插入套餐表
         Setmeal setmeal=new Setmeal();
         BeanUtils.copyProperties(setmealDTO,setmeal);
-        setmealMapper.addSetmeal(setmeal);
+        setmealMapper.addSetmeal(setmeal, MerchantContext.getCurrentId());
 
         //插入套餐菜品关系表
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
@@ -68,7 +69,7 @@ public class SetmealServiceImpl implements SetmealService {
     public PageResult pageViewSetmeal(SetmealPageQueryDTO setmealPageQueryDTO) {
         PageHelper.startPage(setmealPageQueryDTO.getPage(),setmealPageQueryDTO.getPageSize());
 
-        Page<SetmealVO> page=setmealMapper.pageViewSetmeal(setmealPageQueryDTO);
+        Page<SetmealVO> page=setmealMapper.pageViewSetmeal(setmealPageQueryDTO, MerchantContext.getCurrentId());
         long total=page.getTotal();
         List<SetmealVO> records=page.getResult();
         return new PageResult(total,records);
@@ -162,10 +163,11 @@ public class SetmealServiceImpl implements SetmealService {
     /**
      * 根据分类id查询套餐信息
      * @param categoryId
+     * @param merchantId
      * @return
      */
     @Override
-    public Setmeal[] getSetmealByCategoryId(Long categoryId) {
-        return setmealDishMapper.getSetmealByCategoryId(categoryId);
+    public Setmeal[] getSetmealByCategoryId(Long categoryId, Long merchantId) {
+        return setmealMapper.getSetmealByCategoryId(categoryId, merchantId);
     }
 }

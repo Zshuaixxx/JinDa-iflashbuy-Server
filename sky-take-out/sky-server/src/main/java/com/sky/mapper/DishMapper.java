@@ -28,21 +28,25 @@ public interface DishMapper {
 
     /**
      * 添加菜品
+     *
      * @param dish
+     * @param merchantId
      */
     @AutoFill(OperationType.INSERT)
-    void addDish(Dish dish);
+    void addDish(Dish dish, Long merchantId);
 
     /**
      * 分页查询菜品（支持三种条件）
+     *
      * @param page
      * @param pageSize
      * @param categoryId
      * @param name
      * @param status
+     * @param merchantId
      * @return
      */
-    Page<DishVO> pageViewDish(String page, String pageSize, String categoryId, String name, String status);
+    Page<DishVO> pageViewDish(String page, String pageSize, String categoryId, String name, String status, Long merchantId);
 
     /**
      * 根据ids查询菜品

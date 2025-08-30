@@ -10,10 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.Category;
-import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.User;
-import com.sky.mapper.DishMapper;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
@@ -85,13 +83,15 @@ public class UserController {
 
     /**
      * 用户端查询分类和套餐信息
+     *
      * @param type
+     * @param merchantId
      * @return
      */
     @GetMapping("/user/category/list")
-    public Result<Category[]> getCategoryByType(Integer type){
+    public Result<Category[]> getCategoryByType(Integer type, Long merchantId){
         log.info("用户端查询分类和套餐信息{}",type);
-        Category[] categories= categoryService.getCateListByType(type);
+        Category[] categories= categoryService.getCateListByType(type, merchantId);
         return Result.success(categories);
     }
 
@@ -167,9 +167,9 @@ public class UserController {
      */
     @Cacheable(cacheNames = "setmealCache",key = "#categoryId")
     @GetMapping("/user/setmeal/list")
-    public Result<Setmeal[]> getSetmealByCategoryId(Long categoryId){
+    public Result<Setmeal[]> getSetmealByCategoryId(Long categoryId, Long merchantId){
         log.info("用户根据分类中套餐分类的id查询套餐信息{}",categoryId);
-        Setmeal[] setmeals=setmealService.getSetmealByCategoryId(categoryId);
+        Setmeal[] setmeals=setmealService.getSetmealByCategoryId(categoryId, merchantId);
         return Result.success(setmeals);
     }
 

@@ -33,7 +33,7 @@ public interface OrderService {
      * @param ordersPageQueryDTO
      * @return
      */
-    PageResult admin_pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+    PageResult merchant_pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 
     /**
      * 查询订单详情

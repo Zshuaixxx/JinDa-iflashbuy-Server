@@ -5,11 +5,14 @@
     <select id="getPageCate" resultType="com.sky.entity.Category">
         select * from category
         <where>
-            <if test="name != null and name!=''">
+            <if test="categoryPageQueryDTO.name != null and name!=''">
                 name=#{name}
             </if>
-            <if test="type != null">
+            <if test="categoryPageQueryDTO.type != null">
                 and type=#{type}
+            </if>
+            <if test="merchantId != null">
+                and merchant_id= #{merchantId}
             </if>
         </where>
     </select>
@@ -49,6 +52,9 @@
         <where>
             <if test="type != null">
                 type=#{type}
+            </if>
+            <if test="merchantId != null">
+                and merchant_id= #{merchantId}
             </if>
         </where>
     </select>

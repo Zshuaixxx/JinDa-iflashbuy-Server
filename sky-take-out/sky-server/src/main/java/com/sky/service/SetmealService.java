@@ -35,6 +35,7 @@ public interface SetmealService {
      */
     SetmealVO getSetmealById(Integer id);
 
+
     /**
      * 修改更新套餐信息
      * @param setmealDTO
@@ -57,7 +58,8 @@ public interface SetmealService {
     /**
      * 根据分类id查询套餐信息
      * @param categoryId
+     * @param merchantId
      * @return
      */
-    Setmeal[] getSetmealByCategoryId(Long categoryId);
+    Setmeal[] getSetmealByCategoryId(Long categoryId, Long merchantId);
 }

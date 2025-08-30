@@ -3,22 +3,39 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.SetmealMapper">
     <insert id="addSetmeal" useGeneratedKeys="true" keyProperty="id">
-        insert into setmeal(category_id, name, price, description, image, create_time, update_time, create_user, update_user)
-        VALUES (#{categoryId},#{name},#{price},#{description},#{image},#{createTime},#{updateTime},#{createUser},#{updateUser})
+        insert into setmeal (category_id,name,price,status,description,image,create_time,update_time,create_user,update_user,merchant_id)
+        values (#{setmeal.categoryId},#{setmeal.name},#{setmeal.price},#{setmeal.status},#{setmeal.description},#{setmeal.image},#{setmeal.createTime},#{setmeal.updateTime},#{setmeal.createUser},#{setmeal.updateUser},#{merchantId})
     </insert>
 
     <select id="pageViewSetmeal" resultType="com.sky.vo.SetmealVO">
         select setmeal.*,category.name as categoryName from setmeal left outer join category on setmeal.category_id = category.id
         <where>
-            <if test="name != null and name!=''">
+            <if test="setmealPageQueryDTO.name != null and setmealPageQueryDTO.name!=''">
                 setmeal.name like concat('%',#{name},'%')
             </if>
-            <if test="categoryId != null">
+            <if test="setmealPageQueryDTO.categoryId != null">
                 and category_id=#{categoryId}
             </if>
-            <if test="status != null">
+            <if test="setmealPageQueryDTO.status != null">
                 and setmeal.status=#{status}
             </if>
+            and setmeal.merchant_id = #{merchantId}
+        </where>
+    </select>
+    
+    <select id="merchant_pageViewSetmeal" resultType="com.sky.vo.SetmealVO">
+        select setmeal.*,category.name as categoryName from setmeal left outer join category on setmeal.category_id = category.id
+        <where>
+            <if test="setmealPageQueryDTO.name != null and setmealPageQueryDTO.name!=''">
+                setmeal.name like concat('%',#{setmealPageQueryDTO.name},'%')
+            </if>
+            <if test="setmealPageQueryDTO.categoryId != null">
+                and category_id=#{setmealPageQueryDTO.categoryId}
+            </if>
+            <if test="setmealPageQueryDTO.status != null">
+                and setmeal.status=#{setmealPageQueryDTO.status}
+            </if>
+            and setmeal.merchant_id = #{merchantId}
         </where>
     </select>
 
@@ -26,7 +43,11 @@
         select setmeal.*,category.name as categoryName from setmeal left outer join category on setmeal.category_id = category.id
         where setmeal.id=#{id}
     </select>
-
+    
+    <select id="getSetmealByIdWithMerchantCheck" resultType="com.sky.vo.SetmealVO">
+        select setmeal.*,category.name as categoryName from setmeal left outer join category on setmeal.category_id = category.id
+        where setmeal.id=#{id} and setmeal.merchant_id=#{merchantId}
+    </select>
 
     <update id="updateSetmeal" >
         update setmeal
@@ -54,6 +75,9 @@
             </if>
             <if test="updateUser != null">
                 update_user=#{updateUser},
+            </if>
+            <if test="merchantId != null">
+                merchant_id=#{merchantId},
             </if>
         </set>
         where id=#{id}

@@ -24,6 +24,7 @@ public interface SetmealDishMapper {
 
     /**
      * 插入套餐对应的菜品列表
+     *
      * @param setmealDishes
      */
     void addSetmealDish(List<SetmealDish> setmealDishes);

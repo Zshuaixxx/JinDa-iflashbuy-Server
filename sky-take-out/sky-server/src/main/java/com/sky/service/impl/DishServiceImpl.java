@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.StatusConstant;
+import com.sky.context.MerchantContext;
 import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
@@ -48,7 +49,7 @@ public class DishServiceImpl implements DishService {
         Dish dish=new Dish();
         BeanUtils.copyProperties(dishDTO,dish);
         //插入菜品
-        dishMapper.addDish(dish);
+        dishMapper.addDish(dish, MerchantContext.getCurrentId());
         //插入口味
         Long id=dish.getId();
         List<DishFlavor> flavors = dishDTO.getFlavors();
@@ -72,7 +73,7 @@ public class DishServiceImpl implements DishService {
     @Override
     public PageResult pageViewDish(String page, String pageSize, String categoryId, String name, String status) {
         PageHelper.startPage(Integer.parseInt(page),Integer.parseInt(pageSize));
-        Page<DishVO> pageResult=dishMapper.pageViewDish(page,pageSize,categoryId,name,status);
+        Page<DishVO> pageResult=dishMapper.pageViewDish(page,pageSize,categoryId,name,status, MerchantContext.getCurrentId());
         long total=pageResult.getTotal();
         List<DishVO> records=pageResult.getResult();
         return new PageResult(total,records);

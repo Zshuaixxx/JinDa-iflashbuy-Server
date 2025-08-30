@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.sky.config.RabbitMQConfig;
 import com.sky.constant.MessageConstant;
 import com.sky.context.EmployeeContext;
+import com.sky.context.MerchantContext;
 import com.sky.dto.*;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
@@ -164,11 +165,11 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public PageResult admin_pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+    public PageResult merchant_pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
         PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
 
         //先查订单表
-        Page<Orders> page =orderMapper.pageViewHistoryOrders(ordersPageQueryDTO);
+        Page<Orders> page =orderMapper.merchant_pageViewHistoryOrders(ordersPageQueryDTO, MerchantContext.getCurrentId());
 
         //再查orderDetail
         List<Orders> ordersList = page.getResult();
@@ -255,9 +256,9 @@ public class OrderServiceImpl implements OrderService {
      */
     public OrderStatisticsVO statistics() {
         // 根据状态，分别查询出待接单、待派送、派送中的订单数量
-        Integer toBeConfirmed = orderMapper.countStatus(Orders.TO_BE_CONFIRMED);
-        Integer confirmed = orderMapper.countStatus(Orders.CONFIRMED);
-        Integer deliveryInProgress = orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS);
+        Integer toBeConfirmed = orderMapper.countStatus(Orders.TO_BE_CONFIRMED, MerchantContext.getCurrentId());
+        Integer confirmed = orderMapper.countStatus(Orders.CONFIRMED, MerchantContext.getCurrentId());
+        Integer deliveryInProgress = orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS, MerchantContext.getCurrentId());
 
         // 将查询出的数据封装到orderStatisticsVO中响应
         OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();

@@ -24,14 +24,16 @@ public interface SetmealMapper {
      * @param setmeal
      */
     @AutoFill(OperationType.INSERT)
-    void addSetmeal(Setmeal setmeal);
+    void addSetmeal(Setmeal setmeal, Long merchantId);
 
     /**
      * 分页查询套餐
+     *
      * @param setmealPageQueryDTO
+     * @param merchantId
      * @return
      */
-    Page<SetmealVO> pageViewSetmeal(SetmealPageQueryDTO setmealPageQueryDTO);
+    Page<SetmealVO> pageViewSetmeal(SetmealPageQueryDTO setmealPageQueryDTO, Long merchantId);
 
     /**
      * 根据套餐id查询套餐和对应的分类名称
@@ -63,4 +65,14 @@ public interface SetmealMapper {
 
     @Select("select * from setmeal where id=#{setmealId}")
     Setmeal getById(Long setmealId);
+
+    /**
+     * 根据分类id查询套餐信息（用户端）
+     * @param categoryId
+     * @param merchantId
+     * @return
+     */
+    @Select("select * from setmeal where category_id=#{categoryId} and merchant_id=#{merchantId} and status=1")
+    Setmeal[] getSetmealByCategoryId(Long categoryId, Long merchantId);
+
 }

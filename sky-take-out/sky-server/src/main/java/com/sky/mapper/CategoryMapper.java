@@ -2,14 +2,12 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
-import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 
 /**
  * @author 帅的被人砍
@@ -20,10 +18,12 @@ public interface CategoryMapper {
 
     /**
      * 分页查询分类信息
+     *
      * @param categoryPageQueryDTO
+     * @param merchantId
      * @return
      */
-    Page<Category> getPageCate(CategoryPageQueryDTO categoryPageQueryDTO);
+    Page<Category> getPageCate(CategoryPageQueryDTO categoryPageQueryDTO, Long merchantId);
 
     /**
      * 新增分类
@@ -50,9 +50,11 @@ public interface CategoryMapper {
     void deleteCate(Long id);
 
     /**
-     *根据类型查询分类
+     * 根据类型查询分类
+     *
      * @param type
+     * @param merchantId
      * @return
      */
-    Category[] getCateListByType(Integer type);
+    Category[] getCateListByType(Integer type, Long merchantId);
 }

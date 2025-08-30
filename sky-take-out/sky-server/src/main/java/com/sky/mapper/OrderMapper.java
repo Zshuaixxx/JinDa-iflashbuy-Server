@@ -2,12 +2,9 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.RiderSquareOrderDTO;
 import com.sky.entity.Orders;
 import com.sky.temp.OrdersAndLocation;
-import com.sky.vo.OrderPageViewVO;
-import com.sky.vo.TurnoverReportVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -47,6 +44,16 @@ public interface OrderMapper {
     Page<Orders> pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 
     /**
+     * 管理端查询历史订单
+     *
+     * @param ordersPageQueryDTO
+     * @param merchantId
+     * @return
+     */
+    Page<Orders> merchant_pageViewHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO, Long merchantId);
+
+
+    /**
      * 根据id查询订单
      * @param id
      */
@@ -65,8 +72,8 @@ public interface OrderMapper {
      * 根据状态统计订单数量
      * @param status
      */
-    @Select("select count(id) from orders where status = #{status}")
-    Integer countStatus(Integer status);
+    @Select("select count(id) from orders where status=#{status} and merchant_id=#{merchantId}")
+    Integer countStatus(Integer status, Long merchantId);
 
     /**
      * 查询超时订单

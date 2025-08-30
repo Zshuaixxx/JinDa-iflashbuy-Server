@@ -3,9 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.DishMapper">
     <insert id="addDish" useGeneratedKeys="true" keyProperty="id">
-        insert into dish(name, category_id, price, image, description, status, create_time, update_time, create_user, update_user)
+        insert into dish(name, category_id, price, image, description, status, create_time, update_time, create_user, update_user, merchant_id)
         VALUES
-        (#{name},#{categoryId},#{price},#{image},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
+        (#{dish.name},#{dish.categoryId},#{dish.price},#{dish.image},#{dish.description},#{dish.status},#{dish.createTime},#{dish.updateTime},#{dish.createUser},#{dish.updateUser}, #{merchantId})
     </insert>
     
     <select id="pageViewDish" resultType="com.sky.vo.DishVO">
@@ -19,6 +19,9 @@
             </if>
             <if test="status != null and status != '' ">
                 and status=#{status}
+            </if>
+            <if test="merchantId != null and merchantId != '' ">
+                and merchant_id= #{merchantId}
             </if>
         </where>
     </select>

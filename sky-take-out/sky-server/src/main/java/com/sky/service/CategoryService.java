@@ -13,10 +13,12 @@ public interface CategoryService {
 
     /**
      * 分页查询分类信息
+     *
      * @param categoryPageQueryDTO
+     * @param merchantId
      * @return
      */
-    PageResult getPageCate(CategoryPageQueryDTO categoryPageQueryDTO);
+    PageResult getPageCate(CategoryPageQueryDTO categoryPageQueryDTO, Long merchantId);
 
     /**
      * 新增分类
@@ -45,8 +47,10 @@ public interface CategoryService {
 
     /**
      * 根据类型查询分类
+     *
      * @param type
+     * @param merchantId
      * @return
      */
-    Category[] getCateListByType(Integer type);
+    Category[] getCateListByType(Integer type, Long merchantId);
 }

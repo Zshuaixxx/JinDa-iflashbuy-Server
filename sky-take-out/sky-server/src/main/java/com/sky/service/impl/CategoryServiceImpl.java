@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.context.EmployeeContext;
+import com.sky.context.MerchantContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
@@ -29,13 +30,15 @@ public class CategoryServiceImpl implements CategoryService {
     private DishMapper dishMapper;
     /**
      * 分页查询分类信息
+     *
      * @param categoryPageQueryDTO
+     * @param merchantId
      * @return
      */
     @Override
-    public PageResult getPageCate(CategoryPageQueryDTO categoryPageQueryDTO) {
+    public PageResult getPageCate(CategoryPageQueryDTO categoryPageQueryDTO, Long merchantId) {
         PageHelper.startPage(categoryPageQueryDTO.getPage(),categoryPageQueryDTO.getPageSize());
-        Page<Category> page =categoryMapper.getPageCate(categoryPageQueryDTO);
+        Page<Category> page =categoryMapper.getPageCate(categoryPageQueryDTO, merchantId);
         long total=page.getTotal();
         List<Category> records=page.getResult();
         return new PageResult(total,records);
@@ -51,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
         BeanUtils.copyProperties(categoryDTO,category);
         category.setStatus(0);
         // 设置商家ID，从上下文中获取
-        category.setMerchantId(EmployeeContext.getCurrentId());
+        category.setMerchantId(MerchantContext.getCurrentId());
 //        category.setCreateTime(LocalDateTime.now());
 //        category.setUpdateTime(LocalDateTime.now());
 //        category.setCreateUser(BaseContext.getCurrentId());
@@ -102,11 +105,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 根据类型查询菜品分类或套餐
+     *
      * @param type
+     * @param merchantId
      * @return
      */
     @Override
-    public Category[] getCateListByType(Integer type) {
-        return categoryMapper.getCateListByType(type);
+    public Category[] getCateListByType(Integer type, Long merchantId) {
+        return categoryMapper.getCateListByType(type, merchantId);
     }
 }

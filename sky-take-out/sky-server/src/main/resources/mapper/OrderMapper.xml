@@ -123,6 +123,31 @@
         from orders
         where rider_id=#{riderId} and order_time &gt; #{begin} and order_time &lt; #{end} and status=5
     </select>
+    <select id="merchant_pageViewHistoryOrders" resultType="com.sky.entity.Orders">
+        select * from orders
+        <where>
+            <if test="ordersPageQueryDTO.userId != null">
+                user_id=#{ordersPageQueryDTO.userId}
+            </if>
+            <if test="ordersPageQueryDTO.status != null">
+                and status=#{ordersPageQueryDTO.status}
+            </if>
+            <if test="ordersPageQueryDTO.number != null">
+                and number=#{ordersPageQueryDTO.number}
+            </if>
+            <if test="ordersPageQueryDTO.phone != null">
+                and phone=#{ordersPageQueryDTO.phone}
+            </if>
+            <if test="ordersPageQueryDTO.beginTime != null">
+                and order_time > #{ordersPageQueryDTO.beginTime}
+            </if>
+            <if test="ordersPageQueryDTO.endTime != null">
+                and order_time &lt; #{ordersPageQueryDTO.endTime}
+            </if>
+            and merchant_id = #{merchantId}
+        </where>
+        order by order_time desc
+    </select>
 
 
 </mapper>

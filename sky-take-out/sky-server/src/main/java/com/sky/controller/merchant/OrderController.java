@@ -36,7 +36,7 @@ public class OrderController {
      */
     @GetMapping("/admin/order/conditionSearch")
     public Result<PageResult> PageViewHistoryOrder(OrdersPageQueryDTO ordersPageQueryDTO){
-        return Result.success(orderService.admin_pageViewHistoryOrders(ordersPageQueryDTO));
+        return Result.success(orderService.merchant_pageViewHistoryOrders(ordersPageQueryDTO));
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.sky.controller.merchant;
 
 import com.sky.annotation.Log;
+import com.sky.context.MerchantContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
@@ -34,7 +35,7 @@ public class CategoryController {
     @GetMapping("/admin/category/page")
     public Result<PageResult> getPageCate(CategoryPageQueryDTO categoryPageQueryDTO){
         log.info("分页查询分类信息{}",categoryPageQueryDTO);
-        PageResult result=categoryService.getPageCate(categoryPageQueryDTO);
+        PageResult result=categoryService.getPageCate(categoryPageQueryDTO, MerchantContext.getCurrentId());
         return Result.success(result);
     }
 
@@ -99,7 +100,7 @@ public class CategoryController {
     @GetMapping("/admin/category/list")
     public Result<Category[]> getCateListByType(Integer type){
         log.info("根据类型查询分类{}",type);
-        Category[] categories=categoryService.getCateListByType(type);
+        Category[] categories=categoryService.getCateListByType(type, MerchantContext.getCurrentId());
         return Result.success(categories);
     }
 }
