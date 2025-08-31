@@ -69,10 +69,9 @@ public interface SetmealMapper {
     /**
      * 根据分类id查询套餐信息（用户端）
      * @param categoryId
-     * @param merchantId
      * @return
      */
-    @Select("select * from setmeal where category_id=#{categoryId} and merchant_id=#{merchantId} and status=1")
-    Setmeal[] getSetmealByCategoryId(Long categoryId, Long merchantId);
+    @Select("select * from setmeal where category_id=#{categoryId}  and status=1")
+    Setmeal[] getSetmealByCategoryId(Long categoryId);
 
 }

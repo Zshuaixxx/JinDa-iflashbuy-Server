@@ -167,9 +167,9 @@ public class UserController {
      */
     @Cacheable(cacheNames = "setmealCache",key = "#categoryId")
     @GetMapping("/user/setmeal/list")
-    public Result<Setmeal[]> getSetmealByCategoryId(Long categoryId, Long merchantId){
+    public Result<Setmeal[]> getSetmealByCategoryId(Long categoryId){
         log.info("用户根据分类中套餐分类的id查询套餐信息{}",categoryId);
-        Setmeal[] setmeals=setmealService.getSetmealByCategoryId(categoryId, merchantId);
+        Setmeal[] setmeals=setmealService.getSetmealByCategoryId(categoryId);
         return Result.success(setmeals);
     }
 

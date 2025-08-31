@@ -57,9 +57,9 @@ public interface SetmealService {
 
     /**
      * 根据分类id查询套餐信息
+     *
      * @param categoryId
-     * @param merchantId
      * @return
      */
-    Setmeal[] getSetmealByCategoryId(Long categoryId, Long merchantId);
+    Setmeal[] getSetmealByCategoryId(Long categoryId);
 }

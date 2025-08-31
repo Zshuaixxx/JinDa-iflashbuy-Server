@@ -162,12 +162,12 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 根据分类id查询套餐信息
+     *
      * @param categoryId
-     * @param merchantId
      * @return
      */
     @Override
-    public Setmeal[] getSetmealByCategoryId(Long categoryId, Long merchantId) {
-        return setmealMapper.getSetmealByCategoryId(categoryId, merchantId);
+    public Setmeal[] getSetmealByCategoryId(Long categoryId) {
+        return setmealMapper.getSetmealByCategoryId(categoryId);
     }
 }
